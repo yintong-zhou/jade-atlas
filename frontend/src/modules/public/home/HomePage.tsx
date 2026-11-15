@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Link } from 'react-router'
 import { useProjects } from '../../../shared/api/queries'
 import { ButtonLink } from '../../../shared/components/ButtonLink'
@@ -6,15 +7,18 @@ import { Reveal } from '../../../shared/components/Reveal'
 import { site } from '../../../shared/site'
 import { texts } from '../../../shared/texts'
 import { ProjectGrid } from '../projects/ProjectsPage'
+import { useHomeIntro } from './useHomeIntro'
 
 export function HomePage() {
   const projects = useProjects().data ?? []
+  const introRef = useRef<HTMLElement>(null)
+  useHomeIntro(introRef)
 
   return (
     <Container>
       <title>{`${texts.owner.name} · ${texts.owner.role}`}</title>
 
-      <section data-intro className="py-16 md:py-24">
+      <section ref={introRef} data-intro className="py-16 md:py-24">
         <h1 className="intro-title type-display max-w-[20ch]">{texts.home.title}</h1>
         <p className="intro-subtitle type-body-lg mt-6 max-w-[70ch] text-muted-foreground">{texts.home.subtitle}</p>
         <div className="mt-8 flex flex-wrap gap-4">
