@@ -1,0 +1,17 @@
+# Intermediate files (see AGENTS.md)
+.tmp/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python (execution/)
+__pycache__/
+.venv/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vs/
+.idea/
