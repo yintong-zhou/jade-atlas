@@ -12,6 +12,7 @@ export function useCountUp(rootRef: RefObject<HTMLElement | null>): void {
     const observer = new IntersectionObserver((entries) => {
       if (!entries.some((e) => e.isIntersecting)) return
       observer.disconnect()
+      if (prefersReducedMotion()) return // switched on after the page opened
       try {
         scope = createScope({ root: rootRef }).add(() => {
           root.querySelectorAll<HTMLElement>('[data-count-to]').forEach((el) => {

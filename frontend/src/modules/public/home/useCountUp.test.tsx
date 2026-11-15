@@ -1,6 +1,6 @@
 import { beforeEach, expect, it, vi } from 'vitest'
 import { publicApi } from '../../../shared/api/publicApi'
-import { stubMatchMedia } from '../../../test/media'
+import { fireMediaChange, stubMatchMedia } from '../../../test/media'
 import { renderRoute } from '../../../test/render'
 
 const anime = vi.hoisted(() => ({
@@ -83,4 +83,31 @@ it('reverts on unmount', () => {
   enterViewport()
   renderRoute('/').unmount()
   expect(anime.revert).toHaveBeenCalledTimes(1)
+})
+
+it('does not count when reduced motion is switched on before the numbers arrive', () => {
+  let reduced = false
+  stubMatchMedia(() => reduced)
+  let reveal: () => void = () => {}
+  window.IntersectionObserver = class {
+    cb: IntersectionObserverCallback
+    constructor(cb: IntersectionObserverCallback) {
+      this.cb = cb
+    }
+    observe() {
+      reveal = () =>
+        this.cb([{ isIntersecting: true } as IntersectionObserverEntry], this as unknown as IntersectionObserver)
+    }
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return []
+    }
+  } as unknown as typeof IntersectionObserver
+  renderRoute('/')
+  reduced = true
+  fireMediaChange()
+  reveal()
+  expect(anime.animate).not.toHaveBeenCalled()
+  expect(countValues()).toEqual(['8', '38', '10'])
 })
