@@ -8,6 +8,7 @@ export const texts = {
       "For over 8 years I've been building enterprise web applications with C#, ASP.NET and Oracle, used every day by thousands of people.",
     seeProjects: 'See projects',
     readCv: 'Read my CV',
+    scrollHint: 'Scroll',
     numbers: [
       { value: 8, suffix: '+', label: 'years of experience' },
       { value: 38, suffix: '', label: 'web apps migrated' },

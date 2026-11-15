@@ -37,6 +37,7 @@
 }
 
 :root {
+  --header-height: 45px; /* 44px row + 1px border */
   --motion-fast: 200ms;
   --motion-reveal: 500ms;
   --motion-count: 800ms;
