@@ -10,6 +10,7 @@ Visual rules for the public site and the private area: colour, type, layout, com
 - One accent colour. Everything else is black, white and grey.
 - Flat surfaces: 1px borders instead of shadows, gently rounded corners, no gradients.
 - Avoid: generic corporate templates, stock illustrations, emoji used as icons, more than one call to action competing in the same view.
+- One exception: the Home hero sequence (see "Motion"). It is the only illustrative, scroll-driven element on the site. Everything around it stays minimal.
 
 ## Logo and name
 
@@ -48,7 +49,8 @@ Define the tokens once as CSS custom properties on `:root` and expose them to Ta
 
 **Rules**
 
-- The accent is for links, the single main call to action of a view, and the active navigation item. Do not use it for backgrounds of sections, headings or decoration.
+- The accent is for links, the single main call to action of a view, and the active navigation item. Do not use it for backgrounds of sections, headings or decoration. The only exception is the highlighted part of the Home title, which the hero sequence forms out of jade dust.
+- The Home hero background is pure white (`--color-card`), because the hero images have a white background. The rest of the page keeps `--color-background`.
 - Status is never colour alone: "Published", errors and confirmations always carry a text label or an icon.
 - `--color-border` is too light to delimit a control (1.22:1). Inputs, checkboxes and selects use `--color-border-strong`.
 
@@ -62,6 +64,7 @@ Define the tokens once as CSS custom properties on `:root` and expose them to Ta
 | Accent on background (links) | 5.45 |
 | Accent on muted | 4.79 |
 | White on accent (button) | 5.69 |
+| Accent on card (Home title highlight) | 5.69 |
 | Destructive on background | 4.63 |
 | Border strong on card | 4.83 |
 
@@ -131,10 +134,11 @@ Both are open source (SIL Open Font License). Self-host the `woff2` files with `
 - Project covers are 16:9, cropped from the centre, with a 1px border. Reserve the space with `aspect-ratio` so the page does not shift while they load, and load them lazily below the fold.
 - Every image has an `alt` text that describes it; decorative images have an empty `alt`.
 - No stock photos or generic illustrations. A project without a cover shows a muted block with the project title in mono.
+- The Home hero images (rock, jade, dust) are the exception. They live in `frontend/src/assets/home-hero/` as WebP, never PNG, in two widths (1024 and 640px). They are decorative: empty `alt`, hidden from screen readers. The first frame is a normal `<img>` loaded eagerly; the others are decoded before the sequence can reach them.
 
 ## Motion
 
-Motion explains where content comes from; it never decorates. The scope is the one in `PROJECT.md`: an introduction on the Home and sections entering the viewport. Nothing else moves, apart from state feedback on hover and press.
+Motion explains where content comes from. The scope is the one in `PROJECT.md`: the scroll sequence in the Home hero and sections entering the viewport. Nothing else moves, apart from state feedback on hover and press.
 
 **Which tool for what**
 
@@ -142,7 +146,10 @@ Motion explains where content comes from; it never decorates. The scope is the o
 |---|---|
 | Hover, press and focus feedback | CSS transitions |
 | Sections entering the viewport | Motion (`motion/react`) |
-| Home introduction sequence, count-up of the three numbers | AnimeJS (timeline) |
+| Home hero sequence: scroll progress | Motion (`useScroll`) |
+| Home hero sequence: frames | A 2D `<canvas>`, redrawn from the scroll progress |
+| Home hero sequence: dust particles | three.js (WebGL points), loaded on demand, only on the Home |
+| Count-up of the three numbers, when they enter the viewport | AnimeJS |
 
 One element is animated by one tool only. Never put Motion and AnimeJS on the same node.
 
@@ -162,18 +169,32 @@ One element is animated by one tool only. Never put Motion and AnimeJS on the sa
 **Rules**
 
 - Animate `opacity` and `transform` only. Never width, height, top, left or anything that moves the layout.
-- Elements arrive from below and decelerate. No bounce, no overshoot, no rotation, no parallax, no scroll-linked scrubbing.
-- A section reveals once. It does not replay when scrolling back.
-- The Home introduction lasts at most 1.5s in total and never blocks input: links and buttons work from the first frame.
-- Do not split text into letters. The title enters as one block.
+- Elements arrive from below and decelerate. No bounce, no overshoot, no rotation, no parallax. Scroll-linked scrubbing is allowed only in the Home hero sequence.
+- A section reveals once. It does not replay when scrolling back. The Home hero sequence is the exception: it follows the scroll in both directions.
+- Animations never block input: links and buttons work from the first frame.
+- Do not split DOM text into letters. In the hero the dust is drawn on the canvas, while the real title stays one text block in the HTML.
 - The count-up runs once, uses tabular figures so the width does not jump, and ends on the exact value written in `PROFILE.md`.
 - At most two animated groups visible at the same time.
 - Content is visible by default in the HTML and CSS. The initial hidden state is set by the animation library, so a failed script never leaves an empty page.
 - No route transitions, no animated loaders beyond a simple skeleton or spinner in the private area.
 
+**Home hero sequence**
+
+The Home opens on a white hero that shows only the grey rock. Scrolling drives the sequence: the rock cracks, opens into jade, dissolves into dust, and the dust composes the highlighted part of the Home title in the accent colour. The rest of the title, the subtitle and the buttons appear when the dust has settled.
+
+- The scroll stays native. The hero is a tall section with a sticky stage; never intercept wheel or touch events, never scroll for the user, no scroll snapping.
+- It is the only pinned section on the site.
+- Smoothness comes first. Target 60fps on a mid-range phone:
+  - draw only inside `requestAnimationFrame`, and only when the scroll progress has changed;
+  - animate the canvas content, `opacity` and `transform` only; no layout reads while scrolling;
+  - cap the canvas pixel ratio at 2 and scale the particle count to the viewport;
+  - decode every image before the sequence can reach it, and reserve the stage size so nothing shifts;
+  - stop drawing when the hero is out of the viewport.
+- The real title, subtitle and buttons are in the HTML from the first frame, for screen readers and for a failed script. The canvas is `aria-hidden`.
+
 **Reduced motion**
 
-When the system asks for reduced motion, the site shows the final state at once: no translation, no count-up, no sequence. Colour feedback on hover stays.
+When the system asks for reduced motion, the site shows the final state at once: no translation, no count-up, no sequence. Colour feedback on hover stays. The Home hero becomes one screen tall, with the still jade stone and the complete title.
 
 - Motion: wrap the application in `<MotionConfig reducedMotion="user">`.
 - AnimeJS: do not start the timeline when `matchMedia("(prefers-reduced-motion: reduce)").matches` is true.
@@ -195,16 +216,12 @@ import { motion } from "motion/react";
 />
 ```
 
-```ts
-// Home introduction (AnimeJS v4). Create it inside createScope() and call revert() on unmount.
-import { createTimeline, stagger } from "animejs";
+```tsx
+// Home hero sequence: scroll progress from Motion, drawing on a canvas.
+import { useMotionValueEvent, useScroll } from "motion/react";
 
-if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  createTimeline({ defaults: { duration: 600, ease: "outExpo" } })
-    .add(".intro-title", { opacity: [0, 1], y: [24, 0] })
-    .add(".intro-subtitle", { opacity: [0, 1], y: [24, 0] }, "-=450")
-    .add(".intro-action", { opacity: [0, 1], y: [12, 0], delay: stagger(80) }, "-=450");
-}
+const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end end"] });
+useMotionValueEvent(scrollYProgress, "change", (progress) => requestDraw(progress));
 ```
 
 ## Voice
@@ -227,3 +244,5 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
 ## Source
 
 Generated with the `ui-ux-pro-max` skill for the product type "Portfolio/Personal". Style, neutral palette, type pairing and the animation rules come from its database. Chosen by the owner: the jade green accent (the skill proposed blue) and the gently rounded corners. Added on top of it for this project: `--color-success` and `--color-border-strong`, the type and spacing scales, and the translation of the motion presets from GSAP to Motion and AnimeJS.
+
+Changed by the owner on 2026-11-15: the Home hero scroll sequence. It replaces the timed Home introduction and overrides three rules that came from the skill: no scroll-linked scrubbing, no accent on headings, no illustrations.
