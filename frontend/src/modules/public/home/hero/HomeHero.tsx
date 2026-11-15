@@ -1,7 +1,9 @@
-import { Component, useState, type ReactNode } from 'react'
+import { Component, useEffect, useState, type ReactNode } from 'react'
+import { reducedMotionQuery } from '../../../../shared/motion'
 import { HeroCopy } from './HeroCopy'
 import { jadeStill } from './heroFrames'
-import { heroMode } from './heroMode'
+import { heroMode, shortViewportQuery } from './heroMode'
+import { HeroSequence } from './HeroSequence'
 
 // Static hero: the still jade stone above the full title, subtitle and actions.
 function StaticHero() {
@@ -25,7 +27,20 @@ class StaticOnError extends Component<{ children: ReactNode }, { failed: boolean
 }
 
 export function HomeHero() {
-  const [mode] = useState(heroMode)
-  // The sequence arrives in the next task; until then both modes show the static hero.
-  return <StaticOnError>{mode === 'sequence' ? <StaticHero /> : <StaticHero />}</StaticOnError>
+  const [mode, setMode] = useState(heroMode)
+  const [failed, setFailed] = useState(false)
+
+  // A phone rotated to landscape, or reduced motion switched on, lands on Static (and back).
+  useEffect(() => {
+    const queries = [reducedMotionQuery, shortViewportQuery].map((q) => window.matchMedia(q))
+    const update = () => setMode(heroMode())
+    queries.forEach((q) => q.addEventListener('change', update))
+    return () => queries.forEach((q) => q.removeEventListener('change', update))
+  }, [])
+
+  return (
+    <StaticOnError key={mode}>
+      {mode === 'sequence' && !failed ? <HeroSequence onFail={() => setFailed(true)} /> : <StaticHero />}
+    </StaticOnError>
+  )
 }

@@ -52,3 +52,8 @@ export function layers(p: number, hasDust: boolean): { frames: number; dust: num
     name,
   }
 }
+
+// Pointer events on the hero text: only once the buttons can be seen, or while keyboard focus is inside.
+export function copyState(p: number, revealed: boolean): { interactive: boolean } {
+  return { interactive: revealed || p >= HERO.interactive }
+}

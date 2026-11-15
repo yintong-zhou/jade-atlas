@@ -138,3 +138,12 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* Home hero: while keyboard focus is inside the hero text, show the final state whatever the scroll. */
+[data-hero][data-revealed="true"] [data-hero-copy] :is(span, p, div) {
+  opacity: 1 !important;
+  transform: none !important;
+}
+[data-hero][data-revealed="true"] [data-hero-fx] {
+  opacity: 0 !important;
+}

@@ -10,6 +10,8 @@ const anime = vi.hoisted(() => ({
 }))
 
 vi.mock('animejs', () => ({ animate: anime.animate, createScope: anime.createScope }))
+// This file is about the numbers; the hero needs a canvas that jsdom does not have.
+vi.mock('./hero/HomeHero', () => ({ HomeHero: () => null }))
 
 beforeEach(() => {
   anime.animate.mockClear()
