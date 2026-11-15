@@ -165,3 +165,79 @@ it('redraws on resize', async () => {
   act(() => resizeObserverCallback())
   await waitFor(() => expect(ctx2d.drawImage).toHaveBeenCalled())
 })
+
+// Task 6: particle layer
+const fakeDust = { render: vi.fn(), layout: vi.fn(), dispose: vi.fn() }
+const webgl = () => {
+  HTMLCanvasElement.prototype.getContext = vi.fn((kind: string) => (kind === '2d' ? ctx2d : {})) as never
+}
+const dustOptions = () => dust.createDust.mock.calls[0][0] as { onLost: () => void; count: number; imageUrl: string }
+
+beforeEach(() => {
+  fakeDust.render.mockClear()
+  fakeDust.layout.mockClear()
+  fakeDust.dispose.mockClear()
+})
+
+it('creates the particle layer from the last frame when WebGL is available', async () => {
+  webgl()
+  dust.createDust.mockResolvedValue(fakeDust)
+  renderRoute('/')
+  await waitFor(() => expect(dust.createDust).toHaveBeenCalledTimes(1))
+  expect(dustOptions().count).toBe(HERO.particles.large)
+  expect(dustOptions().imageUrl).toContain('f_119')
+  await waitFor(() => expect(fakeDust.render).toHaveBeenCalled())
+})
+
+it('re-measures the particles on resize', async () => {
+  webgl()
+  dust.createDust.mockResolvedValue(fakeDust)
+  renderRoute('/')
+  await waitFor(() => expect(fakeDust.render).toHaveBeenCalled())
+  act(() => resizeObserverCallback())
+  await waitFor(() => expect(fakeDust.layout).toHaveBeenCalled())
+})
+
+it('carries on without particles when the layer cannot be created', async () => {
+  webgl()
+  dust.createDust.mockResolvedValue(null)
+  renderRoute('/')
+  await waitFor(() => expect(dust.createDust).toHaveBeenCalled())
+  expect(hero()).toHaveAttribute('data-hero', 'sequence')
+})
+
+it('carries on without particles when the three.js chunk fails to load', async () => {
+  webgl()
+  dust.createDust.mockRejectedValue(new Error('chunk'))
+  renderRoute('/')
+  await waitFor(() => expect(dust.createDust).toHaveBeenCalled())
+  await new Promise((r) => setTimeout(r, 0))
+  expect(hero()).toHaveAttribute('data-hero', 'sequence')
+})
+
+it('drops the particles when the WebGL context is lost', async () => {
+  webgl()
+  dust.createDust.mockResolvedValue(fakeDust)
+  renderRoute('/')
+  await waitFor(() => expect(fakeDust.render).toHaveBeenCalled())
+  fakeDust.render.mockClear()
+  act(() => dustOptions().onLost())
+  expect(fakeDust.dispose).toHaveBeenCalledTimes(1)
+  expect(hero()).toHaveAttribute('data-hero', 'sequence')
+  // without any scroll, the next frame redraws without dust: the frames canvas is visible again
+  await waitFor(() => expect(framesCanvas().style.opacity).not.toBe('0'))
+  await new Promise((r) => setTimeout(r, 50))
+  expect(fakeDust.render).not.toHaveBeenCalled()
+})
+
+it('disposes a particle layer that arrives after unmount', async () => {
+  webgl()
+  let resolve!: (d: typeof fakeDust) => void
+  dust.createDust.mockReturnValue(new Promise((r) => (resolve = r)))
+  const { unmount } = renderRoute('/')
+  await waitFor(() => expect(dust.createDust).toHaveBeenCalled())
+  unmount()
+  await act(async () => resolve(fakeDust))
+  expect(fakeDust.dispose).toHaveBeenCalledTimes(1)
+  expect(fakeDust.render).not.toHaveBeenCalled()
+})

@@ -2,8 +2,10 @@ import { ChevronDown } from 'lucide-react'
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'motion/react'
 import { useEffect, useEffectEvent, useRef, useState, type FocusEvent } from 'react'
 import { texts } from '../../../../shared/texts'
+import type { Dust } from './dust'
 import { createFrameCanvas } from './frameCanvas'
 import { heroFrames } from './heroFrames'
+import { supportsWebGL } from './heroMode'
 import { HeroCopy } from './HeroCopy'
 import { copyState, HERO, layers } from './heroTimeline'
 
@@ -15,6 +17,7 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
   const sectionRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
+  const frameBoxRef = useRef<HTMLDivElement>(null)
   const framesRef = useRef<HTMLCanvasElement>(null)
   const dustRef = useRef<HTMLCanvasElement>(null)
   const copyRef = useRef<HTMLDivElement>(null)
@@ -62,6 +65,7 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
     let visible = true
     let dirty = false
     let resized = false
+    let dust: Dust | null = null
 
     const draw = () => {
       raf = 0
@@ -73,11 +77,13 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
       if (resized) {
         resized = false
         frames.resize()
+        dust?.layout()
       }
       frames.draw(p)
-      const l = layers(p, false)
+      const l = layers(p, dust != null)
       framesCanvas.style.opacity = String(l.frames)
       dustCanvas.style.opacity = String(l.dust)
+      dust?.render(l.travel, l.dust)
       copy.style.pointerEvents = copyState(p, revealedRef.current).interactive ? 'auto' : 'none'
     }
 
@@ -119,12 +125,51 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
     ro?.observe(stage)
     schedule()
 
+    // Particle layer: three.js is loaded only here, after the first paint, and only with WebGL.
+    if (supportsWebGL()) {
+      const small = window.matchMedia('(max-width: 767px)').matches
+      import('./dust')
+        .then(({ createDust }) =>
+          createDust({
+            canvas: dustCanvas,
+            stage,
+            frameBox: frameBoxRef.current!,
+            target: nameRef.current!,
+            imageUrl: urls[urls.length - 1],
+            count: small ? HERO.particles.small : HERO.particles.large,
+            onLost: () => {
+              if (disposed || !dust) return
+              dust.dispose()
+              dust = null
+              schedule()
+            },
+          }),
+        )
+        .catch(() => null)
+        .then((layer) => {
+          if (!layer) return
+          if (disposed) {
+            layer.dispose()
+            return
+          }
+          dust = layer
+          schedule()
+          // The name is measured again once the web font is in.
+          document.fonts?.ready.then(() => {
+            if (disposed || dust !== layer) return
+            layer.layout()
+            schedule()
+          })
+        })
+    }
+
     return () => {
       disposed = true
       cancelAnimationFrame(raf)
       io.disconnect()
       ro?.disconnect()
       frames.dispose()
+      dust?.dispose()
       scheduleRef.current = () => {}
     }
   }, [urls, progress])
@@ -150,6 +195,7 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
     >
       <div ref={stageRef} className="sticky top-0 h-svh overflow-hidden">
         <div
+          ref={frameBoxRef}
           data-hero-fx
           className="absolute top-1/2 left-1/2 aspect-square w-[min(80vw,60svh,640px)] -translate-x-1/2 -translate-y-1/2 mask-[radial-gradient(closest-side,black_72%,transparent)]"
         >
