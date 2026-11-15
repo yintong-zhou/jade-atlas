@@ -14,7 +14,7 @@ Only information that is already public goes in this file, so it is safe even if
 
 - LinkedIn: linkedin.com/in/yintong-zhou
 - Email: contactdm.yt@gmail.com
-- GitHub: to be provided by the owner
+- GitHub: github.com/yintong-zhou
 
 ## What stays private
 
