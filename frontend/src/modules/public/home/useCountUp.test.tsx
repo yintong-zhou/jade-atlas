@@ -28,7 +28,10 @@ beforeEach(() => {
 // Replaces the never-firing observer of setup.ts with one that reports the target as visible.
 function enterViewport() {
   window.IntersectionObserver = class {
-    constructor(private cb: IntersectionObserverCallback) {}
+    cb: IntersectionObserverCallback
+    constructor(cb: IntersectionObserverCallback) {
+      this.cb = cb
+    }
     observe() {
       this.cb([{ isIntersecting: true } as IntersectionObserverEntry], this as unknown as IntersectionObserver)
     }

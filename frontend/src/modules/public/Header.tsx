@@ -15,7 +15,7 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 
 export function Header() {
   return (
-    <header className="border-b border-border bg-card">
+    <header className="relative z-10 h-(--header-height) border-b border-border bg-card">
       <Container className="flex items-center justify-between gap-4">
         <Link to="/" className="inline-flex min-h-11 items-center gap-2 font-semibold">
           <span aria-hidden="true" className="size-6 shrink-0 rounded-full bg-primary" />

@@ -8,7 +8,11 @@ it('clamps a range to 0..1', () => {
 })
 
 it('maps progress through the track to the two frames around it', () => {
-  const track = [[0, 0], [0.5, 0.5], [1, 1]] as const
+  const track = [
+    [0, 0],
+    [0.5, 0.5],
+    [1, 1],
+  ] as const
   expect(frameAt(0, 5, track)).toEqual({ a: 0, b: 1, mix: 0 })
   const mid = frameAt(0.375, 5, track) // pos 1.5
   expect([mid.a, mid.b]).toEqual([1, 2])

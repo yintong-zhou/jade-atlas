@@ -1,9 +1,10 @@
 import { vi } from 'vitest'
 
 // Full MediaQueryList shape: Motion calls the listener methods.
-export function stubMatchMedia(reduced: boolean): void {
+// `matches`: one answer for every query, or a function of the query.
+export function stubMatchMedia(matches: boolean | ((query: string) => boolean)): void {
   window.matchMedia = vi.fn((query: string) => ({
-    matches: reduced,
+    matches: typeof matches === 'function' ? matches(query) : matches,
     media: query,
     onchange: null,
     addEventListener: vi.fn(),
