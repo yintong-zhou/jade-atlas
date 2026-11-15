@@ -1,3 +1,5 @@
+export const reducedMotionQuery = '(prefers-reduced-motion: reduce)'
+
 export function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  return window.matchMedia(reducedMotionQuery).matches
 }
