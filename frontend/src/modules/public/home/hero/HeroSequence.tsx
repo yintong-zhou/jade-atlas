@@ -60,6 +60,8 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
     const framesCanvas = framesRef.current!
     const dustCanvas = dustRef.current!
     const copy = copyRef.current!
+    const frameBox = frameBoxRef.current!
+    const name = nameRef.current!
     let disposed = false
     let raf = 0
     let visible = true
@@ -83,7 +85,7 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
       const l = layers(p, dust != null)
       framesCanvas.style.opacity = String(l.frames)
       dustCanvas.style.opacity = String(l.dust)
-      dust?.render(l.travel, l.dust)
+      dust?.render(l.travel, 1) // the canvas opacity fades the layer; fading in the shader too would square it
       copy.style.pointerEvents = copyState(p, revealedRef.current).interactive ? 'auto' : 'none'
     }
 
@@ -130,20 +132,22 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
       const small = window.matchMedia('(max-width: 767px)').matches
       import('./dust')
         .then(({ createDust }) =>
-          createDust({
-            canvas: dustCanvas,
-            stage,
-            frameBox: frameBoxRef.current!,
-            target: nameRef.current!,
-            imageUrl: urls[urls.length - 1],
-            count: small ? HERO.particles.small : HERO.particles.large,
-            onLost: () => {
-              if (disposed || !dust) return
-              dust.dispose()
-              dust = null
-              schedule()
-            },
-          }),
+          disposed
+            ? null
+            : createDust({
+                canvas: dustCanvas,
+                stage,
+                frameBox,
+                target: name,
+                imageUrl: urls[urls.length - 1],
+                count: small ? HERO.particles.small : HERO.particles.large,
+                onLost: () => {
+                  if (disposed || !dust) return
+                  dust.dispose()
+                  dust = null
+                  schedule()
+                },
+              }),
         )
         .catch(() => null)
         .then((layer) => {

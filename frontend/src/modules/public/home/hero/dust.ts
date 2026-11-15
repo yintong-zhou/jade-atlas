@@ -170,7 +170,13 @@ export async function createDust(o: {
     renderer.dispose()
   }
 
-  if (!layout()) {
+  let laidOut = false
+  try {
+    laidOut = layout()
+  } catch {
+    // measuring or sampling failed: free the renderer below
+  }
+  if (!laidOut) {
     dispose()
     return null
   }

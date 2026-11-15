@@ -241,3 +241,19 @@ it('disposes a particle layer that arrives after unmount', async () => {
   expect(fakeDust.dispose).toHaveBeenCalledTimes(1)
   expect(fakeDust.render).not.toHaveBeenCalled()
 })
+
+it('fades the particles once, through the canvas, not again in the shader', async () => {
+  webgl()
+  dust.createDust.mockResolvedValue(fakeDust)
+  renderRoute('/')
+  await waitFor(() => expect(fakeDust.render).toHaveBeenCalled())
+  for (const call of fakeDust.render.mock.calls) expect(call[1]).toBe(1)
+})
+
+it('does not create the particle layer when the hero unmounts while three.js loads', async () => {
+  webgl()
+  const { unmount } = renderRoute('/')
+  unmount()
+  await new Promise((r) => setTimeout(r, 20))
+  expect(dust.createDust).not.toHaveBeenCalled()
+})
