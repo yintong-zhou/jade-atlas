@@ -9,7 +9,13 @@ import { HeroSequence } from './HeroSequence'
 function StaticHero() {
   return (
     <section data-hero="static" className="bg-card px-4 py-16 md:px-6 md:py-24 lg:px-8">
-      <img src={jadeStill} alt="" width={720} height={720} className="mx-auto mb-8 h-auto w-[min(60vw,320px)]" />
+      <img
+        src={jadeStill}
+        alt=""
+        width={720}
+        height={720}
+        className="hero-feather mx-auto mb-8 h-auto w-[min(60vw,320px)]"
+      />
       <HeroCopy />
     </section>
   )
