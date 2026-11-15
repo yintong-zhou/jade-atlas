@@ -47,5 +47,6 @@ I'm a fullstack software developer based in Milan. I work on the Microsoft .NET 
 
 Yintong Zhou · Fullstack .NET Software Developer · Milan
 
+- GitHub: github.com/yintong-zhou
 - LinkedIn: linkedin.com/in/yintong-zhou
 - Email: contactdm.yt@gmail.com
