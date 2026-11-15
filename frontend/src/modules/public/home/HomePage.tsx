@@ -7,29 +7,32 @@ import { Reveal } from '../../../shared/components/Reveal'
 import { site } from '../../../shared/site'
 import { texts } from '../../../shared/texts'
 import { ProjectGrid } from '../projects/ProjectsPage'
-import { useHomeIntro } from './useHomeIntro'
+import { useCountUp } from './useCountUp'
 
 export function HomePage() {
   const projects = useProjects().data ?? []
-  const introRef = useRef<HTMLElement>(null)
-  useHomeIntro(introRef)
+  const numbersRef = useRef<HTMLDivElement>(null)
+  useCountUp(numbersRef)
 
   return (
     <Container>
       <title>{`${texts.owner.name} · ${texts.owner.role}`}</title>
 
-      <section ref={introRef} data-intro className="py-16 md:py-24">
-        <h1 className="intro-title type-display max-w-[20ch]">{texts.home.title}</h1>
-        <p className="intro-subtitle type-body-lg mt-6 max-w-[70ch] text-muted-foreground">{texts.home.subtitle}</p>
+      <section className="py-16 md:py-24">
+        <h1 className="type-display max-w-[20ch]">{texts.home.title}</h1>
+        <p className="type-body-lg mt-6 max-w-[70ch] text-muted-foreground">{texts.home.subtitle}</p>
         <div className="mt-8 flex flex-wrap gap-4">
-          <ButtonLink to="/projects" variant="main" className="intro-action">
+          <ButtonLink to="/projects" variant="main">
             {texts.home.seeProjects}
           </ButtonLink>
-          <ButtonLink to="/cv" variant="secondary" className="intro-action">
+          <ButtonLink to="/cv" variant="secondary">
             {texts.home.readCv}
           </ButtonLink>
         </div>
-        <div className="intro-numbers mt-16 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
+      </section>
+
+      <Reveal as="section" className="py-16 md:py-24">
+        <div ref={numbersRef} className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
           {texts.home.numbers.map((n) => (
             <div key={n.label}>
               <p className="type-display font-mono tabular-nums">
@@ -40,7 +43,7 @@ export function HomePage() {
             </div>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       {projects.length > 0 && (
         <Reveal as="section" className="py-16 md:py-24">

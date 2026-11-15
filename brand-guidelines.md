@@ -159,7 +159,6 @@ One element is animated by one tool only. Never put Motion and AnimeJS on the sa
 |---|---|---|
 | `--motion-fast` | 200ms | Hover and press: colour and border only |
 | `--motion-reveal` | 500ms | A section entering the viewport |
-| `--motion-intro-step` | 600ms | Each step of the Home introduction |
 | `--motion-count` | 800ms | Count-up of the Home numbers |
 | `--ease-out` | `cubic-bezier(0.33, 1, 0.68, 1)` | Reveals and state changes |
 | `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Home introduction |

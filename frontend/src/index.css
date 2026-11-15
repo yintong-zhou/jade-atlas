@@ -39,7 +39,6 @@
 :root {
   --motion-fast: 200ms;
   --motion-reveal: 500ms;
-  --motion-intro-step: 600ms;
   --motion-count: 800ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
