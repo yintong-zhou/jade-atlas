@@ -147,3 +147,14 @@
 [data-hero][data-revealed="true"] [data-hero-fx] {
   opacity: 0 !important;
 }
+
+/* Home hero frames: fade the square's edges to the white page, so fragments leaving the frame
+   and the dust cut by the image border never show a straight edge. brightness lifts the frames'
+   253-254 background to pure white. */
+.hero-feather {
+  mask-image:
+    linear-gradient(to right, transparent, black 12%, black 88%, transparent),
+    linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  mask-composite: intersect;
+  filter: brightness(1.012);
+}

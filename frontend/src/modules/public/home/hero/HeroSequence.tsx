@@ -197,7 +197,7 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
         <div
           ref={frameBoxRef}
           data-hero-fx
-          className="absolute top-1/2 left-1/2 aspect-square w-[min(80vw,60svh,640px)] -translate-x-1/2 -translate-y-1/2 mask-[radial-gradient(closest-side,black_72%,transparent)]"
+          className="absolute top-1/2 left-1/2 aspect-square w-[min(80vw,60svh,640px)] -translate-x-1/2 -translate-y-1/2 hero-feather"
         >
           <img
             ref={imgRef}

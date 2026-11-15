@@ -119,7 +119,8 @@ export async function createDust(o: {
       uOpacity: { value: 0 },
       uSize: { value: 2 * ratio },
       uSwirl: { value: 0 },
-      uAccent: { value: new Color(accent) },
+      // three.js stores colours as linear; the shader writes sRGB (like the sampled colours), so convert back.
+      uAccent: { value: new Color(accent).convertLinearToSRGB() },
     },
     vertexShader,
     fragmentShader,
