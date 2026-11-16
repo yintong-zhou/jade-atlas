@@ -20,7 +20,7 @@ function stubCv({
   vi.spyOn(publicApi, 'getEducation').mockResolvedValue(education)
 }
 
-it('renders experience rows with a formatted range and "Present" for the current role', async () => {
+it('renders experience ranges and lists multiline achievements while keeping a single line as a paragraph', async () => {
   stubCv({
     experiences: [
       {
@@ -30,7 +30,7 @@ it('renders experience rows with a formatted range and "Present" for the current
         location: 'Milan',
         startDate: '2020-04-01',
         endDate: null,
-        description: 'Built things.',
+        description: 'Built things.\nConnected services.',
       },
       {
         id: 2,
@@ -49,6 +49,15 @@ it('renders experience rows with a formatted range and "Present" for the current
   expect(screen.getByRole('heading', { level: 3, name: 'Developer' })).toBeInTheDocument()
   expect(screen.getByText('Acme · Milan')).toBeInTheDocument()
   expect(screen.getByText('Beta')).toBeInTheDocument()
+  const developer = screen.getByRole('heading', { level: 3, name: 'Developer' }).closest('li')!
+  expect(
+    within(developer)
+      .getAllByRole('listitem')
+      .map((item) => item.textContent),
+  ).toEqual(['Built things.', 'Connected services.'])
+  const junior = screen.getByRole('heading', { level: 3, name: 'Junior developer' }).closest('li')!
+  expect(within(junior).queryByRole('list')).not.toBeInTheDocument()
+  expect(within(junior).getByText('Learned things.', { selector: 'p' })).toBeInTheDocument()
 })
 
 it('groups skills by category, languages included', async () => {

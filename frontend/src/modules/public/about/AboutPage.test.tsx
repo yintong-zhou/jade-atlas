@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { expect, it, vi } from 'vitest'
 import { publicApi } from '../../../shared/api/publicApi'
 import { texts } from '../../../shared/texts'
@@ -21,6 +21,15 @@ it('shows the three bio paragraphs followed by the career sections', async () =>
   renderRoute('/about')
 
   for (const paragraph of texts.about.paragraphs) expect(screen.getByText(paragraph)).toBeInTheDocument()
+  const facts = screen.getByText('Based in', { selector: 'dt' }).closest('dl')!
+  expect(within(facts).getByText('Milan', { selector: 'dd' })).toBeInTheDocument()
+  expect(within(facts).getByText('Languages', { selector: 'dt' })).toBeInTheDocument()
+  for (const language of ['Italian, native', 'English, B2', 'Mandarin Chinese, C1 speaking, B1 writing']) {
+    expect(within(facts).getByText(language)).toBeInTheDocument()
+  }
+  expect(screen.getByText(texts.about.paragraphs[2]).compareDocumentPosition(facts)).toBe(
+    Node.DOCUMENT_POSITION_FOLLOWING,
+  )
   expect(screen.getByRole('heading', { level: 1, name: texts.about.heading })).toBeInTheDocument()
   expect(document.title).toBe(`${texts.about.title} · ${texts.owner.name}`)
   expect(screen.queryByRole('link', { name: texts.about.cvLink })).toBeNull()

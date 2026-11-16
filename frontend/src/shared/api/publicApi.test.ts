@@ -7,7 +7,7 @@ it('returns sample content in development, every title marked as sample', async 
   expect(projects).toHaveLength(3)
   expect(projects.every((p) => p.title.startsWith('Sample'))).toBe(true)
   expect((await publicApi.getExperiences()).some((e) => e.endDate === null)).toBe(true)
-  expect((await publicApi.getSkills()).some((s) => s.category === 'Languages')).toBe(true)
+  expect((await publicApi.getSkills()).some((s) => s.category === 'Programming languages')).toBe(true)
   const types = (await publicApi.getEducation()).map((e) => e.type)
   expect(types).toContain('education')
   expect(types).toContain('certification')
