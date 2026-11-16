@@ -25,6 +25,18 @@ it('shows the cover with alt text, lazy loading and reserved 16:9 space', () => 
   const img = screen.getByRole('img', { name: `Cover image of ${full.title}` })
   expect(img).toHaveAttribute('loading', 'lazy')
   expect(img).toHaveClass('aspect-video')
+  expect(img.parentElement).toHaveClass('overflow-hidden', 'rounded-md')
+  expect(img).toHaveAttribute('data-cover')
+})
+
+it('uses a white tile when placed on the muted ground', () => {
+  render(
+    <MemoryRouter>
+      <ProjectCard project={full} tone="card" />
+    </MemoryRouter>,
+  )
+  expect(screen.getByRole('link')).toHaveClass('bg-card', 'tile-hover')
+  expect(screen.getByRole('link')).not.toHaveClass('bg-muted')
 })
 
 it('shows a muted block with the title when there is no cover, and no empty tag list', () => {

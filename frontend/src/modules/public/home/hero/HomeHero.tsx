@@ -9,7 +9,7 @@ function StaticHero() {
   return (
     <section
       data-hero="static"
-      className="-mt-(--header-height) bg-card px-4 pb-16 pt-[calc(var(--header-height)+64px)] md:px-6 md:pb-24 md:pt-[calc(var(--header-height)+96px)] lg:px-8"
+      className="-mt-(--header-height) min-h-svh bg-card px-(--gut) pb-16 pt-[calc(var(--header-height)+64px)] md:pb-24 md:pt-[calc(var(--header-height)+96px)]"
     >
       <HeroCopy />
     </section>

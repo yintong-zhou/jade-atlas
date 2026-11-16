@@ -39,10 +39,22 @@ The Home says what the owner does; who the owner is belongs on the About page. T
 - Title: I build enterprise web apps & services in .NET
 - Subtitle: Thousands of people use them every day. I write the C# and ASP.NET backend, the SQL data layer and the JavaScript front end, then connect it all to external services.
 - Buttons: "See projects", "Read my CV"
+- Stack section heading: The stack, and what it connects to
+- Stack diagram: Front end (JavaScript) → Backend (C#, ASP.NET MVC, Web API) → Data (Oracle, SQL Server) and External services (Salesforce, ServiceNow, Google APIs)
 - Numbers: 8+ years building enterprise apps, 38 web apps migrated, 10+ apps moved to Single Sign-On
-- Contact heading: Write to me
+- Projects button: See all projects
+
+**Closing (every page, above the footer)**
+
+- Heading: Write to me
+- Line: I'm based in Milan. Write in Italian, English or Mandarin Chinese.
+- Button: Email me
 
 **About**
+
+Page title: Fullstack .NET software developer in Milan
+
+The text below is shown as three paragraphs (split after "frontend." and after "Codex."). The career (experience, skills, education and certifications, PDF) follows on the same page.
 
 I'm a fullstack software developer based in Milan. I work on the Microsoft .NET stack: C#, ASP.NET MVC and Web API on the backend, Oracle and SQL Server for data, JavaScript on the frontend. Over the years I've connected enterprise applications to Salesforce, ServiceNow and Google APIs. My background is in systems and cybersecurity, and today I also build with AI tools such as Claude Code and Codex. I speak Italian, English and Mandarin Chinese, and as a volunteer I run the technical side of ICPN, an association that brings together a community connected to China and Italy.
 

@@ -14,6 +14,10 @@ it('shows title, summary, description, tags and both links', async () => {
   expect(screen.getByText('C#')).toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'Repository' })).toHaveAttribute('href', full.repoUrl)
   expect(screen.getByRole('link', { name: 'Website' })).toHaveAttribute('href', full.siteUrl)
+  for (const name of [texts.projects.repo, texts.projects.site]) {
+    expect(screen.getByRole('link', { name })).toHaveAttribute('target', '_blank')
+    expect(screen.getByRole('link', { name })).toHaveAttribute('rel', 'noreferrer')
+  }
   expect(screen.getByRole('link', { name: texts.projects.back })).toHaveAttribute('href', '/projects')
   expect(document.title).toBe(`${full.title} · Yintong Zhou`)
 })
