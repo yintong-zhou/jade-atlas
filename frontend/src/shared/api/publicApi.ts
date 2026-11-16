@@ -1,6 +1,7 @@
 import type { Education, Experience, Project, PublicContent, Skill } from './types'
+import { githubProjects } from './github'
 
-// ponytail: static sample data in dev, empty in production. Replace the bodies with fetch('/api/public/...') when the API exists.
+// ponytail: career sample data in dev, empty in production. Replace with fetch('/api/public/...') when the API exists.
 async function content(): Promise<PublicContent | null> {
   if (import.meta.env.DEV) {
     const { sampleData } = await import('./sampleData')
@@ -11,10 +12,10 @@ async function content(): Promise<PublicContent | null> {
 
 export const publicApi = {
   async getProjects(): Promise<Project[]> {
-    return (await content())?.projects ?? []
+    return githubProjects()
   },
   async getProject(slug: string): Promise<Project | null> {
-    return (await content())?.projects.find((p) => p.slug === slug) ?? null
+    return githubProjects().find((p) => p.slug === slug) ?? null
   },
   async getExperiences(): Promise<Experience[]> {
     return (await content())?.experiences ?? []
