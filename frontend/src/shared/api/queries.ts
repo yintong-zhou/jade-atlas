@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { publicApi } from './publicApi'
 
-export const useProjects = () => useQuery({ queryKey: ['public', 'projects'], queryFn: () => publicApi.getProjects() })
+export const useProjects = () =>
+  useQuery({ queryKey: ['public', 'projects'], queryFn: () => publicApi.getProjects() })
 
 export const useProject = (slug: string) =>
   useQuery({ queryKey: ['public', 'projects', slug], queryFn: () => publicApi.getProject(slug) })
