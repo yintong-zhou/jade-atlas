@@ -14,7 +14,7 @@ Only information that is already public goes in this file, so it is safe even if
 
 - LinkedIn: linkedin.com/in/yintong-zhou
 - Email: contactdm.yt@gmail.com
-- GitHub: to be provided by the owner
+- GitHub: github.com/yintong-zhou
 
 ## What stays private
 
@@ -34,12 +34,27 @@ The public CV page and the seed script (phase 4) need the owner's career data: r
 
 **Home**
 
-- Title: Yintong Zhou. Fullstack .NET Software Developer.
-- Subtitle: For over 8 years I've been building enterprise web applications with C#, ASP.NET and Oracle, used every day by thousands of people.
+The Home says what the owner does; who the owner is belongs on the About page. The owner's name is not in the Home hero.
+
+- Title: I build enterprise web apps & services in .NET
+- Subtitle: Thousands of people use them every day. I write the C# and ASP.NET backend, the SQL data layer and the JavaScript front end, then connect it all to external services.
 - Buttons: "See projects", "Read my CV"
-- Numbers: 8+ years of experience, 38 web apps migrated, 10+ applications under Single Sign-On
+- Stack section heading: The stack, and what it connects to
+- Stack diagram: Front end (JavaScript) → Backend (C#, ASP.NET MVC, Web API) → Data (Oracle, SQL Server) and External services (Salesforce, ServiceNow, Google APIs)
+- Numbers: 8+ years building enterprise apps, 38 web apps migrated, 10+ apps moved to Single Sign-On
+- Projects button: See all projects
+
+**Closing (every page, above the footer)**
+
+- Heading: Write to me
+- Line: I'm based in Milan. Write in Italian, English or Mandarin Chinese.
+- Button: Email me
 
 **About**
+
+Page title: Fullstack .NET software developer in Milan
+
+The text below is shown as three paragraphs (split after "frontend." and after "Codex."). The career (experience, skills, education and certifications, PDF) follows on the same page.
 
 I'm a fullstack software developer based in Milan. I work on the Microsoft .NET stack: C#, ASP.NET MVC and Web API on the backend, Oracle and SQL Server for data, JavaScript on the frontend. Over the years I've connected enterprise applications to Salesforce, ServiceNow and Google APIs. My background is in systems and cybersecurity, and today I also build with AI tools such as Claude Code and Codex. I speak Italian, English and Mandarin Chinese, and as a volunteer I run the technical side of ICPN, an association that brings together a community connected to China and Italy.
 
@@ -47,5 +62,6 @@ I'm a fullstack software developer based in Milan. I work on the Microsoft .NET 
 
 Yintong Zhou · Fullstack .NET Software Developer · Milan
 
+- GitHub: github.com/yintong-zhou
 - LinkedIn: linkedin.com/in/yintong-zhou
 - Email: contactdm.yt@gmail.com

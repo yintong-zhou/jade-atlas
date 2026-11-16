@@ -12,7 +12,7 @@ It is the first piece of a personal management system that will grow by modules 
 
 | Layer    | Technologies                                                                                                                                                     |
 | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Frontend | React + Vite + TypeScript, Tailwind CSS, React Router, TanStack Query, React Hook Form + Zod, Motion for animations, AnimeJS ([animejs.com](http://animejs.com)) |
+| Frontend | React + Vite + TypeScript, Tailwind CSS, React Router, TanStack Query, React Hook Form + Zod, Motion for animations, AnimeJS ([animejs.com](http://animejs.com)), three.js for the GPU particles of the Home hero (loaded only on the Home) |
 | Backend  | ASP.NET Core Web API on .NET 10 (LTS), EF Core with the Oracle provider, ASP.NET Core Identity, OpenAPI                                                          |
 | Database | Oracle                                                                                                                                                           |
 | Tests    | xUnit for the backend, Vitest for the frontend                                                                                                                   |
@@ -27,7 +27,7 @@ In production the frontend is a static site on Cloudflare Pages (for example `ww
 
 **Public pages**
 
-- Home: animated introduction, three highlighted numbers, projects preview, invitation to get in touch.
+- Home: scroll-driven hero sequence (a grey rock opens into jade, dissolves into dust, and the dust forms the highlighted part of the title), three highlighted numbers, projects preview, invitation to get in touch.
 - Projects: cards with description, technologies, links to repo or site.
 - CV: experience timeline, skills, education and certifications, languages, button to download the PDF.
 - About: narrative text.
@@ -122,7 +122,7 @@ Frontend and API are published independently.
 | 2. Login and private area | The user can sign in, and private pages are inaccessible without login |
 | 3. Projects | The user creates, edits, publishes and deletes a project from the form and sees it on the public page |
 | 4. CV | Experiences, skills and education are manageable from forms; the public CV page has a downloadable PDF |
-| 5. Home, About, footer | Complete pages with the copy in `PROFILE.md`; animations only on the Home introduction and on sections entering the viewport, disabled when the system asks for reduced motion |
+| 5. Home, About, footer | Complete pages with the copy in `PROFILE.md`; animations only on the Home hero scroll sequence and on sections entering the viewport, disabled when the system asks for reduced motion |
 | 6. Tests and deploy | Site online, deploy pipeline working, backup working and restore tested |
 
 ## To confirm with the user

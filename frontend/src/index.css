@@ -1,1 +1,361 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --font-*: initial;
+
+  --color-background: #ffffff;
+  --color-foreground: #09090b;
+  --color-card: #ffffff;
+  --color-card-foreground: #09090b;
+  --color-primary: #18181b;
+  --color-on-primary: #ffffff;
+  --color-secondary: #3f3f46;
+  --color-on-secondary: #ffffff;
+  --color-accent: #00755a;
+  --color-on-accent: #ffffff;
+  --color-muted: #f3f5f4;
+  --color-muted-foreground: #52525b;
+  --color-border: #e4e4e7;
+  --color-border-strong: #71717a;
+  --color-ring: #00755a;
+  --color-destructive: #dc2626;
+  --color-on-destructive: #ffffff;
+  --color-success: #00755a;
+  --color-on-success: #ffffff;
+
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+:root {
+  --header-height: 64px;
+  --motion-fast: 200ms;
+  --motion-reveal: 500ms;
+  --motion-count: 800ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --gut: 24px;
+  --padt: 96px;
+  --padb: 48px;
+
+  --glass-jade: var(--color-accent);
+  --glass-jade-deep: #005c47;
+  --glass-jade-light: #5fd3a8;
+  /* 72%: the owner found 94% too opaque to read as glass over the hero. */
+  --glass-fill: color-mix(in srgb, var(--color-card) 72%, transparent);
+  /* Even the light endpoint over white, brightened 3% on hover, exceeds 4.5:1. */
+  --glass-jade-fill: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--glass-jade) 96%, transparent),
+    color-mix(in srgb, var(--glass-jade-deep) 96%, transparent)
+  );
+  --glass-tint: color-mix(in srgb, var(--glass-jade-light) 8%, transparent);
+  --glass-edge: color-mix(in srgb, var(--color-card) 70%, transparent);
+  --glass-rim:
+    inset 0 1px 0 color-mix(in srgb, var(--color-card) 55%, transparent),
+    inset 0 -1px 4px color-mix(in srgb, var(--glass-jade-deep) 10%, transparent);
+  --glass-shadow: 0 12px 32px -16px color-mix(in srgb, var(--glass-jade-deep) 35%, transparent);
+  --glass-blur: 24px;
+}
+
+@media (width >= 640px) {
+  :root {
+    --gut: 48px;
+    --padt: 120px;
+    --padb: 72px;
+  }
+}
+
+@media (width >= 1024px) {
+  :root {
+    --gut: 80px;
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.625;
+    overflow-wrap: anywhere;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
+
+@utility type-display {
+  font-size: clamp(38px, calc(25.371429px + 3.238095vw), 72px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+@utility type-h1 {
+  font-size: clamp(34px, calc(25.828571px + 2.095238vw), 56px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+@utility type-h2 {
+  font-size: clamp(30px, calc(23.314286px + 1.714286vw), 48px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+@utility type-h3 {
+  font-size: clamp(20px, calc(18.514286px + 0.380952vw), 24px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+@utility type-body-lg {
+  font-size: clamp(18px, calc(17.257143px + 0.190476vw), 20px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+@utility type-body {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.625;
+  letter-spacing: 0;
+}
+
+@utility type-small {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+@utility type-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+@utility type-figure {
+  font-family: var(--font-mono);
+  font-size: clamp(30px, calc(23.314286px + 1.714286vw), 48px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+@utility section-pad {
+  padding-block: var(--padt) var(--padb);
+}
+
+@utility glass-main {
+  color: var(--color-on-accent);
+  background: var(--glass-jade-fill);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: var(--glass-jade);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    background: var(--glass-jade);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@utility glass-secondary {
+  color: var(--glass-jade-deep);
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  &:hover {
+    background: linear-gradient(var(--glass-tint), var(--glass-tint)), var(--glass-fill);
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: var(--color-card);
+    &:hover {
+      background: var(--color-card);
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    background: var(--color-card);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    &:hover {
+      background: var(--color-card);
+    }
+  }
+}
+
+/* Trailing arrow on the main action: still, it leans forward on hover. */
+@utility glass-arrow {
+  transition: transform var(--motion-fast) var(--ease-out);
+  :where(a, button):hover > & {
+    transform: translateX(3px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    :where(a, button):hover > & {
+      transform: none;
+    }
+  }
+}
+
+/* Home title: the ".NET" glyphs themselves are jade glass: a jade gradient fill clipped to the text,
+   a translucent white rim, a soft jade glow and a light sweep through the letters.
+   The top of the fill stays at least 3.7:1 on white (large bold text needs 3:1). */
+@utility hero-net {
+  display: inline-block;
+  white-space: nowrap;
+  color: var(--color-accent);
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--glass-jade-light) 55%, transparent));
+
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    background-image:
+      linear-gradient(
+        105deg,
+        transparent 40%,
+        color-mix(in srgb, var(--color-card) 80%, transparent) 50%,
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--glass-jade-light) 35%, var(--glass-jade)) 0%,
+        var(--glass-jade) 45%,
+        var(--glass-jade-deep) 100%
+      );
+    background-size:
+      250% 100%,
+      100% 100%;
+    background-position:
+      100% 0,
+      0 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-card) 55%, transparent);
+    animation: hero-net-sweep 3.2s var(--ease-out) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* Background-position on a single word: paint only, no layout. */
+@keyframes hero-net-sweep {
+  0%,
+  35% {
+    background-position:
+      100% 0,
+      0 0;
+  }
+  75%,
+  100% {
+    background-position:
+      0% 0,
+      0 0;
+  }
+}
+
+@utility link {
+  color: var(--color-accent);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--motion-fast) var(--ease-out);
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    background-image: none;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: none;
+  }
+}
+
+@utility link-inline {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@utility tile-hover {
+  transition: transform var(--motion-fast) var(--ease-out);
+  & [data-cover] {
+    transition: transform var(--motion-fast) var(--ease-out);
+  }
+  &:hover {
+    transform: translateY(-2px);
+  }
+  &:hover [data-cover] {
+    transform: scale(1.03);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &:hover,
+    & [data-cover],
+    &:hover [data-cover] {
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+@utility enter {
+  animation: enter var(--motion-reveal) var(--ease-out) both;
+  animation-delay: calc(var(--enter-i, 0) * 80ms);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Home hero: while keyboard focus is inside the hero text, show the final state whatever the scroll. */
+[data-hero][data-revealed='true'] [data-hero-copy] :is(h1, span, p, div) {
+  opacity: 1 !important;
+  transform: none !important;
+}
+[data-hero][data-revealed='true'] [data-hero-fx] {
+  opacity: 0 !important;
+}
