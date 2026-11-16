@@ -6,7 +6,7 @@
   --shadow-*: initial;
   --font-*: initial;
 
-  --color-background: #fafafa;
+  --color-background: #ffffff;
   --color-foreground: #09090b;
   --color-card: #ffffff;
   --color-card-foreground: #09090b;
@@ -16,22 +16,22 @@
   --color-on-secondary: #ffffff;
   --color-accent: #00755a;
   --color-on-accent: #ffffff;
-  --color-muted: #e8ecf0;
-  --color-muted-foreground: #475569;
+  --color-muted: #f3f5f4;
+  --color-muted-foreground: #52525b;
   --color-border: #e4e4e7;
   --color-border-strong: #71717a;
-  --color-ring: #18181b;
+  --color-ring: #00755a;
   --color-destructive: #dc2626;
   --color-on-destructive: #ffffff;
   --color-success: #00755a;
   --color-on-success: #ffffff;
 
-  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
 
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 
   --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -43,69 +43,42 @@
   --motion-count: 800ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Floating header glass: 94% white keeps accent text AA even over pure black. */
-  --header-glass-surface: color-mix(in srgb, var(--color-card) 72%, transparent);
-  --header-glass-opaque: var(--color-card);
-  --header-glass-border: color-mix(in srgb, var(--color-primary) 12%, transparent);
-  --header-glass-highlight: color-mix(in srgb, var(--color-card) 90%, transparent);
-  --header-glass-shadow:
-    0 8px 24px color-mix(in srgb, var(--color-primary) 8%, transparent), inset 0 1px 0 var(--header-glass-highlight);
-  --header-glass-blur: 24px;
+  --gut: 24px;
+  --padt: 96px;
+  --padb: 48px;
 
-  /* Liquid glass controls (buttons, navigation island): jade and translucent white, like the hero stars.
-     The light jade is glow only; text never sits on it. */
   --glass-jade: var(--color-accent);
   --glass-jade-deep: #005c47;
   --glass-jade-light: #5fd3a8;
-  --glass-tint: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--glass-jade-light) 14%, transparent),
-    color-mix(in srgb, var(--glass-jade) 8%, transparent)
+  /* 72%: the owner found 94% too opaque to read as glass over the hero. */
+  --glass-fill: color-mix(in srgb, var(--color-card) 72%, transparent);
+  /* Even the light endpoint over white, brightened 3% on hover, exceeds 4.5:1. */
+  --glass-jade-fill: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--glass-jade) 96%, transparent),
+    color-mix(in srgb, var(--glass-jade-deep) 96%, transparent)
   );
+  --glass-tint: color-mix(in srgb, var(--glass-jade-light) 8%, transparent);
   --glass-edge: color-mix(in srgb, var(--color-card) 70%, transparent);
-
-  /* Glossy glass: a white reflection along the top edge (clear of the label), a bright rim on top and a soft inner shade at the bottom. */
-  --glass-gloss: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-card) 50%, transparent) 0%,
-    color-mix(in srgb, var(--color-card) 14%, transparent) 20%,
-    transparent 32%
-  );
   --glass-rim:
-    inset 0 1px 1px color-mix(in srgb, var(--color-card) 85%, transparent),
-    inset 0 -2px 6px color-mix(in srgb, var(--color-primary) 10%, transparent);
-  --glass-shadow:
-    0 10px 30px -8px color-mix(in srgb, var(--color-primary) 22%, transparent),
-    0 2px 6px color-mix(in srgb, var(--color-primary) 8%, transparent);
-  --glass-white-fill: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-card) 78%, transparent),
-    color-mix(in srgb, var(--color-card) 52%, transparent)
-  );
-
-  /* Serene earthy greens for the buttons (moss and sand), with diffuse light instead of a sharp gloss. */
-  --glass-moss: #3d6b56;
-  --glass-moss-deep: #2c4f40;
-  --glass-sand: #e9e4d4;
-  --glass-moss-fill: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--glass-moss) 86%, transparent),
-    color-mix(in srgb, var(--glass-moss-deep) 90%, transparent)
-  );
-  --glass-sand-fill: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--color-card) 72%, transparent),
-    color-mix(in srgb, var(--glass-sand) 48%, transparent)
-  );
-  --glass-soft-light: radial-gradient(
-    120% 90% at 25% 0%,
-    color-mix(in srgb, var(--color-card) 30%, transparent),
-    transparent 55%
-  );
-  --glass-soft-rim:
     inset 0 1px 0 color-mix(in srgb, var(--color-card) 55%, transparent),
-    inset 0 -1px 4px color-mix(in srgb, var(--glass-moss-deep) 10%, transparent);
-  --glass-soft-shadow: 0 12px 32px -14px color-mix(in srgb, var(--glass-moss-deep) 45%, transparent);
+    inset 0 -1px 4px color-mix(in srgb, var(--glass-jade-deep) 10%, transparent);
+  --glass-shadow: 0 12px 32px -16px color-mix(in srgb, var(--glass-jade-deep) 35%, transparent);
+  --glass-blur: 24px;
+}
+
+@media (width >= 640px) {
+  :root {
+    --gut: 48px;
+    --padt: 120px;
+    --padb: 72px;
+  }
+}
+
+@media (width >= 1024px) {
+  :root {
+    --gut: 80px;
+  }
 }
 
 @layer base {
@@ -114,7 +87,7 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.625;
     overflow-wrap: anywhere;
   }
 
@@ -125,109 +98,118 @@
 }
 
 @utility type-display {
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-size: clamp(38px, calc(25.371429px + 3.238095vw), 72px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
   text-wrap: balance;
-  @media (width >= 768px) {
-    font-size: 64px;
-  }
 }
 
 @utility type-h1 {
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  font-size: clamp(34px, calc(25.828571px + 2.095238vw), 56px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   text-wrap: balance;
-  @media (width >= 768px) {
-    font-size: 48px;
-  }
 }
 
 @utility type-h2 {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.2;
+  font-size: clamp(30px, calc(23.314286px + 1.714286vw), 48px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
   text-wrap: balance;
-  @media (width >= 768px) {
-    font-size: 32px;
-  }
 }
 
 @utility type-h3 {
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1.3;
+  font-size: clamp(20px, calc(18.514286px + 0.380952vw), 24px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   text-wrap: balance;
-  @media (width >= 768px) {
-    font-size: 24px;
-  }
 }
 
 @utility type-body-lg {
-  font-size: 18px;
+  font-size: clamp(18px, calc(17.257143px + 0.190476vw), 20px);
   font-weight: 400;
-  line-height: 1.6;
-  @media (width >= 768px) {
-    font-size: 20px;
-  }
+  line-height: 1.5;
+  letter-spacing: 0;
 }
 
 @utility type-body {
   font-size: 16px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.625;
+  letter-spacing: 0;
 }
 
 @utility type-small {
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
+  letter-spacing: 0;
 }
 
 @utility type-label {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
-  @media (width >= 768px) {
-    font-size: 14px;
-  }
+  letter-spacing: 0;
 }
-/* Serene glass buttons: frosted panels in calm earthy greens, lit softly from the top-left.
-   Main: translucent moss glass with no white light over the label, so white text stays ≥ 4.5:1 over white.
-   Secondary: frosted sand-white panel, deep moss text. */
+
+@utility type-figure {
+  font-family: var(--font-mono);
+  font-size: clamp(30px, calc(23.314286px + 1.714286vw), 48px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+@utility section-pad {
+  padding-block: var(--padt) var(--padb);
+}
+
 @utility glass-main {
   color: var(--color-on-accent);
-  background: var(--glass-moss-fill);
-  border: 1px solid color-mix(in srgb, var(--color-card) 22%, transparent);
-  box-shadow: var(--glass-soft-rim), var(--glass-soft-shadow);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  backdrop-filter: blur(16px) saturate(140%);
-  &:hover {
-    filter: brightness(1.03);
+  background: var(--glass-jade-fill);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: var(--glass-jade);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    background: var(--glass-jade);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
 @utility glass-secondary {
-  color: var(--glass-moss-deep);
-  background: var(--glass-soft-light), var(--glass-sand-fill);
-  border: 1px solid color-mix(in srgb, var(--color-card) 60%, transparent);
-  box-shadow: var(--glass-soft-rim), var(--glass-soft-shadow);
-  -webkit-backdrop-filter: blur(24px) saturate(140%);
-  backdrop-filter: blur(24px) saturate(140%);
+  color: var(--glass-jade-deep);
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
   &:hover {
-    background: var(--glass-soft-light), var(--glass-tint), var(--glass-sand-fill);
+    background: linear-gradient(var(--glass-tint), var(--glass-tint)), var(--glass-fill);
   }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    background: var(--glass-soft-light), var(--color-card);
+    background: var(--color-card);
+    &:hover {
+      background: var(--color-card);
+    }
   }
   @media (prefers-reduced-transparency: reduce) {
-    background: var(--glass-soft-light), var(--color-card);
+    background: var(--color-card);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+    &:hover {
+      background: var(--color-card);
+    }
   }
 }
 
@@ -239,6 +221,9 @@
   }
   @media (prefers-reduced-motion: reduce) {
     transition: none;
+    :where(a, button):hover > & {
+      transform: none;
+    }
   }
 }
 
@@ -302,8 +287,68 @@
 
 @utility link {
   color: var(--color-accent);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--motion-fast) var(--ease-out);
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    background-image: none;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: none;
+  }
+}
+
+@utility link-inline {
+  color: var(--color-accent);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+@utility tile-hover {
+  transition: transform var(--motion-fast) var(--ease-out);
+  & [data-cover] {
+    transition: transform var(--motion-fast) var(--ease-out);
+  }
+  &:hover {
+    transform: translateY(-2px);
+  }
+  &:hover [data-cover] {
+    transform: scale(1.03);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &:hover,
+    & [data-cover],
+    &:hover [data-cover] {
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+@utility enter {
+  animation: enter var(--motion-reveal) var(--ease-out) both;
+  animation-delay: calc(var(--enter-i, 0) * 80ms);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Home hero: while keyboard focus is inside the hero text, show the final state whatever the scroll. */

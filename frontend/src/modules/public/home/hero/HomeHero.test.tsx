@@ -18,7 +18,7 @@ it('shows subtitle and both actions', () => {
   renderRoute('/')
   expect(screen.getByText(texts.home.subtitle)).toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'See projects' })).toHaveAttribute('href', '/projects')
-  expect(screen.getByRole('link', { name: 'Read my CV' })).toHaveAttribute('href', '/cv')
+  expect(screen.getByRole('link', { name: 'Read my CV' })).toHaveAttribute('href', '/about#experience')
 })
 
 it('shows the complete copy without the old stone image or canvas in static mode', () => {

@@ -13,13 +13,13 @@ export function HeroCopy({
   styles?: { title?: MotionStyle; subtitle?: MotionStyle; actions?: MotionStyle }
 }) {
   return (
-    <div className="mx-auto max-w-[70ch] text-center">
-      <motion.h1 className="type-display text-balance" style={styles.title}>
+    <div className="mx-auto max-w-[1280px] text-center">
+      <motion.h1 className="type-display mx-auto max-w-[24ch] text-balance" style={styles.title}>
         {lead}
         <span className="hero-net">.NET</span>
         {tail}
       </motion.h1>
-      <motion.p className="type-body-lg mt-6 text-muted-foreground" style={styles.subtitle}>
+      <motion.p className="type-body-lg mx-auto mt-6 max-w-[62ch] text-muted-foreground" style={styles.subtitle}>
         {texts.home.subtitle}
       </motion.p>
       <motion.div className="mt-8 flex flex-wrap justify-center gap-4" style={styles.actions}>
@@ -27,7 +27,7 @@ export function HeroCopy({
           {texts.home.seeProjects}
           <ArrowRight aria-hidden="true" size={20} strokeWidth={1.75} className="glass-arrow" />
         </ButtonLink>
-        <ButtonLink to="/cv" variant="secondary">
+        <ButtonLink to="/about#experience" variant="secondary">
           <FileText aria-hidden="true" size={20} strokeWidth={1.5} />
           {texts.home.readCv}
         </ButtonLink>

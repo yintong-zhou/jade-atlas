@@ -13,9 +13,9 @@ export function Header() {
   return (
     <header className="pointer-events-none sticky top-0 z-40 flex h-(--header-height) shrink-0 items-center justify-center">
       <div
-        className={`${styles.island} pointer-events-auto flex max-w-[calc(100%-24px)] items-center rounded-full py-1 text-card-foreground`}
+        className={`${styles.island} pointer-events-auto flex max-w-[min(100%-2*var(--gut),1280px)] items-center rounded-full py-1 text-card-foreground`}
       >
-        <Link to="/" className="inline-flex min-h-11 min-w-11 items-center rounded-full px-2 font-semibold">
+        <Link to="/" className="inline-flex min-h-11 min-w-11 items-center rounded-full px-2 font-medium">
           <span className="truncate">{texts.owner.name}</span>
         </Link>
         <nav className="shrink-0">
