@@ -1,5 +1,9 @@
 # Scroll animations: Home hero sequence and public pages
 
+**Latest owner revision, 2026-11-15:** the single stone sequence is superseded by `../plans/2026-11-15-jade-sky-hero.md`: a jade sky drawn into a lower-center vortex, followed by individual name glyphs launching, falling and bouncing into place. Public navigation is centered without logo or divider. This direct instruction authorizes the hero-specific bounce and rotation.
+
+**2026-11-15 owner revision:** the frame-sequence implementation and the restriction against a real-time stone model below are superseded by the owner's request for a Three.js model. See `../plans/2026-11-15-threejs-hero.md`. The scroll choreography, accessibility and other public-page goals remain applicable.
+
 Design for the builder. Read with `PROJECT.md`, `brand-guidelines.md` (section "Motion"), `PROFILE.md` and `AGENTS.md`. Where this document and `brand-guidelines.md` disagree, this document wins and the guidelines get updated (see "Documents to update").
 
 Lines marked **(call)** are choices made by the designer, not by the owner. The owner can change them when approving.

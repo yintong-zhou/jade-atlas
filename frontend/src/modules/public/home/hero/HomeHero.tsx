@@ -1,21 +1,16 @@
 import { Component, useEffect, useState, type ReactNode } from 'react'
 import { reducedMotionQuery } from '../../../../shared/motion'
 import { HeroCopy } from './HeroCopy'
-import { jadeStill } from './heroFrames'
 import { heroMode, shortViewportQuery } from './heroMode'
 import { HeroSequence } from './HeroSequence'
 
-// Static hero: the still jade stone above the full title, subtitle and actions.
+// Static hero: complete copy on the same white surface as the navigation.
 function StaticHero() {
   return (
-    <section data-hero="static" className="bg-card px-4 py-16 md:px-6 md:py-24 lg:px-8">
-      <img
-        src={jadeStill}
-        alt=""
-        width={720}
-        height={720}
-        className="hero-feather mx-auto mb-8 h-auto w-[min(60vw,320px)]"
-      />
+    <section
+      data-hero="static"
+      className="-mt-(--header-height) bg-card px-4 pb-16 pt-[calc(var(--header-height)+64px)] md:px-6 md:pb-24 md:pt-[calc(var(--header-height)+96px)] lg:px-8"
+    >
       <HeroCopy />
     </section>
   )

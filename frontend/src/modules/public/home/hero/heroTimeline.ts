@@ -1,59 +1,56 @@
-// Home hero timeline. All numbers are progress (0..1) over the scroll distance of the hero; tune by eye.
+// Progress (0..1) over native hero scroll; the scene and HTML copy share one timeline.
 export const HERO = {
   hintEnd: 0.05,
-  // progress → position in the sequence (0 = first frame, 1 = last), piecewise linear.
-  // Rock holds until 0.08; shell gone and jade intact at 0.44 (frame 119/239);
-  // jade holds to 0.52 (frame 125/239); dust cloud complete at 0.8.
-  track: [
-    [0.08, 0],
-    [0.44, 0.498],
-    [0.52, 0.523],
-    [0.8, 1],
-  ],
-  framesOut: [0.78, 0.82],
-  travel: [0.8, 0.94],
-  settle: [0.94, 1],
-  copy: { rest: [0.94, 0.98], subtitle: [0.95, 0.99], actions: [0.96, 1] },
+  suction: [0.03, 0.4], // every star falls into the hole
+  heat: [0.32, 0.5], // the disk spins up while it swallows the last stars and we fall in
+  dive: [0.4, 0.52], // the camera falls into the hole: its shadow grows past the screen
+  dark: [0.46, 0.52], // the inside of the hole: the page turns dark
+  tunnel: [0.48, 0.55], // the star tunnel fades in
+  warp: [0.5, 0.88], // cruise to light speed
+  light: [0.76, 0.87], // light at the end of the tunnel
+  exit: [0.84, 0.92], // the white opening grows until the page is white again
+  copy: { title: [0.89, 0.95], subtitle: [0.91, 0.97], actions: [0.93, 0.99] },
   spring: { stiffness: 220, damping: 40, restDelta: 0.0005 },
-  particles: { large: 18000, small: 8000 },
+  stars: { large: 1100, small: 440 },
   minViewportHeight: 560,
-  interactive: 0.98, // pointer events on the hero text from here (buttons half visible)
+  interactive: 0.97, // pointer events on the hero text from here (buttons almost fully visible)
+  nav: [0.03, 0.9], // the navigation island hides while the sequence plays, back as the title lands
 } as const
-
-export type Track = readonly (readonly [number, number])[]
 
 export function range(p: number, from: number, to: number): number {
   return Math.min(1, Math.max(0, (p - from) / (to - from)))
 }
 
-function along(p: number, track: Track): number {
-  if (p <= track[0][0]) return track[0][1]
-  for (let i = 1; i < track.length; i++) {
-    const [p0, s0] = track[i - 1]
-    const [p1, s1] = track[i]
-    if (p <= p1) return s0 + (s1 - s0) * range(p, p0, p1)
-  }
-  return track[track.length - 1][1]
+export function smooth(p: number, from: number, to: number): number {
+  const t = range(p, from, to)
+  return t * t * (3 - 2 * t)
 }
 
-export function frameAt(p: number, count: number, track: Track): { a: number; b: number; mix: number } {
-  const pos = Math.min(1, Math.max(0, along(p, track))) * (count - 1)
-  const a = Math.floor(pos)
-  return { a, b: Math.min(a + 1, count - 1), mix: pos - a }
-}
-
-export function layers(p: number, hasDust: boolean): { frames: number; dust: number; travel: number; name: number } {
-  const name = range(p, ...HERO.settle)
-  const out = range(p, ...HERO.framesOut)
+export function modelState(p: number) {
+  const dive = range(p, ...HERO.dive)
+  const dark = smooth(p, ...HERO.dark)
+  const warp = range(p, ...HERO.warp)
+  const exit = range(p, ...HERO.exit)
   return {
-    frames: hasDust ? 1 - out : 1 - name,
-    dust: hasDust ? out * (1 - name) : 0,
-    travel: range(p, ...HERO.travel),
-    name,
+    suction: range(p, ...HERO.suction),
+    heat: smooth(p, ...HERO.heat),
+    // 1 at rest, grows as we fall in (the shadow covers the screen), 0 once the page is dark.
+    holeScale: dark >= 1 ? 0 : 1 + 13 * dive ** 3,
+    dark: exit >= 1 ? 0 : dark,
+    tunnel: exit >= 1 ? 0 : smooth(p, ...HERO.tunnel),
+    // From cruise to light speed: slow at first, then it runs away.
+    speed: 0.06 + 0.94 * warp ** 2.2,
+    light: smooth(p, ...HERO.light),
+    exit: exit * exit * (3 - 2 * exit),
   }
 }
 
 // Pointer events on the hero text: only once the buttons can be seen, or while keyboard focus is inside.
 export function copyState(p: number, revealed: boolean): { interactive: boolean } {
   return { interactive: revealed || p >= HERO.interactive }
+}
+
+// The navigation island steps aside for the sequence; keyboard focus in the hero text brings it back.
+export function navHidden(p: number, revealed: boolean): boolean {
+  return !revealed && p > HERO.nav[0] && p < HERO.nav[1]
 }

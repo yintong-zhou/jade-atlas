@@ -43,7 +43,7 @@ it('hides the preview section when no project is published', async () => {
 it('invites the visitor to get in touch by email', () => {
   vi.spyOn(publicApi, 'getProjects').mockResolvedValue([])
   renderRoute('/')
-  expect(screen.getByRole('heading', { name: 'Get in touch' })).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: texts.home.contactTitle })).toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'contactdm.yt@gmail.com' })).toHaveAttribute(
     'href',
     'mailto:contactdm.yt@gmail.com',

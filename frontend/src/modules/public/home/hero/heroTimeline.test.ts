@@ -1,5 +1,5 @@
-import { expect, it } from 'vitest'
-import { frameAt, HERO, layers, range } from './heroTimeline'
+﻿import { expect, it } from 'vitest'
+import { HERO, modelState, navHidden, range } from './heroTimeline'
 
 it('clamps a range to 0..1', () => {
   expect(range(0.5, 0, 1)).toBe(0.5)
@@ -7,41 +7,43 @@ it('clamps a range to 0..1', () => {
   expect(range(2, 0, 1)).toBe(1)
 })
 
-it('maps progress through the track to the two frames around it', () => {
-  const track = [
-    [0, 0],
-    [0.5, 0.5],
-    [1, 1],
-  ] as const
-  expect(frameAt(0, 5, track)).toEqual({ a: 0, b: 1, mix: 0 })
-  const mid = frameAt(0.375, 5, track) // pos 1.5
-  expect([mid.a, mid.b]).toEqual([1, 2])
-  expect(mid.mix).toBeCloseTo(0.5)
-  expect(frameAt(1, 5, track)).toEqual({ a: 4, b: 4, mix: 0 })
+it('absorbs every star, falls into the hole, crosses the tunnel and comes out on white', () => {
+  expect(modelState(0)).toMatchObject({ suction: 0, holeScale: 1, dark: 0, tunnel: 0, exit: 0 })
+  expect(modelState(0.2).suction).toBeGreaterThan(0)
+  expect(modelState(0.4)).toMatchObject({ suction: 1, holeScale: 1 })
+  expect(modelState(0.5).holeScale).toBeGreaterThan(3)
+  expect(modelState(0.53)).toMatchObject({ holeScale: 0, dark: 1 })
+  expect(modelState(0.6).tunnel).toBe(1)
+  expect(modelState(0.6).speed).toBeLessThan(0.2)
+  expect(modelState(0.86).speed).toBeGreaterThan(0.8)
+  expect(modelState(0.86).light).toBeGreaterThan(0.9)
+  expect(modelState(1)).toMatchObject({ holeScale: 0, dark: 0, tunnel: 0, exit: 1 })
 })
 
-it('holds the first frame before the track starts and the last after it ends', () => {
-  expect(frameAt(0, 120, HERO.track)).toMatchObject({ a: 0, mix: 0 })
-  expect(frameAt(0.9, 120, HERO.track)).toEqual({ a: 119, b: 119, mix: 0 })
+it('speeds up monotonically and stays bounded and reversible at every scroll position', () => {
+  let speed = 0
+  for (let i = 0; i <= 1000; i++) {
+    const p = i / 1000
+    const state = modelState(p)
+    expect(state.speed).toBeGreaterThanOrEqual(speed)
+    speed = state.speed
+    for (const key of ['suction', 'heat', 'dark', 'tunnel', 'speed', 'light', 'exit'] as const) {
+      expect(state[key]).toBeGreaterThanOrEqual(0)
+      expect(state[key]).toBeLessThanOrEqual(1)
+    }
+    modelState(1)
+    expect(modelState(p)).toEqual(state)
+  }
 })
 
-it('holds the intact jade between the two jade knots', () => {
-  const a = frameAt(0.45, 120, HERO.track).a
-  const b = frameAt(0.51, 120, HERO.track).a
-  expect(b - a).toBeLessThanOrEqual(3)
+it('shows the copy only once the page is white again', () => {
+  expect(HERO.copy.title[0]).toBeGreaterThan(HERO.exit[0])
+  expect(modelState(HERO.copy.title[1]).exit).toBe(1)
 })
 
-it('hands over from frames to dust to the real name', () => {
-  expect(layers(0.5, true)).toEqual({ frames: 1, dust: 0, travel: 0, name: 0 })
-  expect(layers(0.8, true).frames).toBeCloseTo(0.5)
-  expect(layers(0.8, true).dust).toBeCloseTo(0.5)
-  expect(layers(0.87, true)).toMatchObject({ frames: 0, dust: 1 })
-  expect(layers(0.87, true).travel).toBeCloseTo(0.5)
-  expect(layers(1, true)).toMatchObject({ dust: 0, name: 1 })
-})
-
-it('cross-fades the frames straight to the name when there is no dust', () => {
-  expect(layers(0.9, false)).toMatchObject({ frames: 1, dust: 0 })
-  expect(layers(0.97, false).frames).toBeCloseTo(0.5)
-  expect(layers(0.97, false).name).toBeCloseTo(0.5)
+it('hides the navigation only while the sequence plays', () => {
+  expect(navHidden(0, false)).toBe(false)
+  expect(navHidden(0.5, false)).toBe(true)
+  expect(navHidden(0.5, true)).toBe(false)
+  expect(navHidden(1, false)).toBe(false)
 })
