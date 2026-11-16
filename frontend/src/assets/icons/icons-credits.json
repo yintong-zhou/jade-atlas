@@ -58,5 +58,29 @@
     "url": "https://github.com/gilbarbara/logos",
     "trademark": true,
     "markUrl": "https://www.salesforce.com/"
+  },
+  {
+    "file": "microsoft-sql-server.svg",
+    "icon": "devicon:microsoftsqlserver",
+    "name": "Microsoft SQL Server",
+    "kind": "colour",
+    "source": "devicons/devicon via Iconify",
+    "author": "Devicon contributors",
+    "licence": "MIT",
+    "url": "https://github.com/devicons/devicon",
+    "trademark": true,
+    "markUrl": "https://www.microsoft.com/sql-server"
+  },
+  {
+    "file": "postgresql.svg",
+    "icon": "logos:postgresql",
+    "name": "PostgreSQL",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://www.postgresql.org/"
   }
 ]
