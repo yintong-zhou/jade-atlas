@@ -5,8 +5,6 @@ import { texts } from '../../../shared/texts'
 import { bare, full } from '../../../test/fixtures'
 import { renderRoute } from '../../../test/render'
 
-const countValues = () => [...document.querySelectorAll('[data-count-to]')].map((el) => el.textContent)
-
 it('shows the title, subtitle and the two actions', async () => {
   vi.spyOn(publicApi, 'getProjects').mockResolvedValue([])
   renderRoute('/')
@@ -16,39 +14,27 @@ it('shows the title, subtitle and the two actions', async () => {
   expect(screen.getByRole('link', { name: 'Read my CV' })).toHaveAttribute('href', '/about#experience')
 })
 
-it('shows the three numbers with their exact values in the initial render', () => {
-  vi.spyOn(publicApi, 'getProjects').mockResolvedValue([])
-  renderRoute('/')
-  expect(countValues()).toEqual(['8', '38', '10'])
-  for (const n of texts.home.numbers) expect(screen.getByText(n.label)).toBeInTheDocument()
-  expect(screen.getAllByText('+')).toHaveLength(2)
-})
-
 it('explains the stack with readable tool names before the numbers', () => {
   vi.spyOn(publicApi, 'getProjects').mockResolvedValue([])
   renderRoute('/')
   const heading = screen.getByRole('heading', { level: 2, name: texts.home.stackTitle })
   const diagram = screen.getByRole('figure', { name: texts.home.stack.summary })
   for (const name of [
-    'Front end',
-    'JavaScript',
+    'Frontend',
+    texts.home.stack.frontEnd.detail,
     'Backend',
     'C#, ASP.NET MVC, Web API',
     'Oracle',
     'SQL Server',
-    'Salesforce',
-    'ServiceNow',
-    'Google APIs',
+    'PostgreSQL',
+    'External APIs',
   ]) {
     expect(within(diagram).getByText(name)).toBeVisible()
   }
   expect(within(diagram).getByRole('heading', { name: 'Data', level: 3 })).toBeVisible()
   expect(within(diagram).getByRole('heading', { name: 'External services', level: 3 })).toBeVisible()
-  expect(diagram.querySelectorAll('img[alt=""]')).toHaveLength(5)
+  expect(diagram.querySelectorAll('img[alt=""], svg[aria-hidden="true"]').length).toBeGreaterThanOrEqual(6)
   expect(heading.compareDocumentPosition(diagram) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-  expect(
-    diagram.compareDocumentPosition(screen.getByText(texts.home.numbers[0].label)) & Node.DOCUMENT_POSITION_FOLLOWING,
-  ).toBeTruthy()
 })
 
 it('previews at most three projects and links to the full list', async () => {

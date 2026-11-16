@@ -15,3 +15,6 @@ __pycache__/
 Thumbs.db
 .vs/
 .idea/
+
+# Owner CV source files: they contain the phone number and town
+frontend/src/modules/public/cv/*.pdf
