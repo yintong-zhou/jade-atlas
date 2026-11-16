@@ -16,6 +16,7 @@ class NoopIntersectionObserver {
 }
 
 beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Unmocked fetch in test')))
   stubMatchMedia(true)
   window.IntersectionObserver = NoopIntersectionObserver as unknown as typeof IntersectionObserver
   window.scrollTo = vi.fn() as unknown as typeof window.scrollTo

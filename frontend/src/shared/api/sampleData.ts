@@ -1,45 +1,7 @@
 import type { PublicContent } from './types'
 
 // Development only. Never shipped: publicApi imports this file inside an import.meta.env.DEV block. Until the API and the CV seed exist (phase 4), the career sections are empty in production.
-const cover =
-  'data:image/svg+xml,' +
-  encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9"><rect width="16" height="9" fill="#e8ecf0"/></svg>',
-  )
-
 export const sampleData: PublicContent = {
-  projects: [
-    {
-      slug: 'sample-portal',
-      title: 'Sample portal',
-      summary: 'Sample summary of an enterprise web portal.',
-      description: 'Sample description, first paragraph.\n\nSample description, second paragraph.',
-      technologies: ['Sample C#', 'Sample Oracle'],
-      repoUrl: 'https://github.com/yintong-zhou',
-      siteUrl: 'https://example.com',
-      coverImageUrl: cover,
-    },
-    {
-      slug: 'sample-sso-integration',
-      title: 'Sample Single Sign-On integration with a deliberately long title to test wrapping',
-      summary: 'Sample summary of an authentication project.',
-      description: 'Sample description of the integration.',
-      technologies: ['Sample ASP.NET', 'Sample Averyveryverylongtechnologynamewithoutanyspaces'],
-      repoUrl: 'https://github.com/yintong-zhou',
-      siteUrl: null,
-      coverImageUrl: null,
-    },
-    {
-      slug: 'sample-bare',
-      title: 'Sample bare project',
-      summary: 'Sample project with no optional data.',
-      description: 'Sample description.',
-      technologies: [],
-      repoUrl: null,
-      siteUrl: null,
-      coverImageUrl: null,
-    },
-  ],
   experiences: [
     {
       id: 1,
