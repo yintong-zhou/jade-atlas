@@ -28,7 +28,7 @@ Texts, photos and CV data are copyright Yintong Zhou, all rights reserved. The c
 
 ## CV data
 
-The public CV page and the seed script (phase 4) need the owner's career data: roles with dates, achievements, skills, education, certifications and languages. The source is the owner's CV. Ask for it when phase 4 starts. Do not invent or embellish entries, and leave out the phone number.
+The public CV page and the seed script (phase 4) need the owner's career data: roles with dates, achievements, skills, education, certifications and languages. The source is the owner's CV (received 2026-11-16). Do not invent or embellish entries. The CV file contains the phone number and a street-level town: neither goes in the repository, on the site, or in a public PDF. The location is "Milan" only. Until the API exists, the development sample data carries the CV entries.
 
 ## Site copy (draft for approval)
 
@@ -54,9 +54,13 @@ The Home says what the owner does; who the owner is belongs on the About page. T
 
 Page title: Fullstack .NET software developer in Milan
 
-The text below is shown as three paragraphs (split after "frontend." and after "Codex."). The career (experience, skills, education and certifications, PDF) follows on the same page.
+The text below is shown as three paragraphs (split after "front end." and after "APIs."). Beside it, a short facts block: "Based in" Milan; "Languages" Italian (native), English (B2), Mandarin Chinese (C1 speaking, B1 writing). The career (experience, skills, education and certifications, PDF) follows on the same page. Rewritten on 2026-11-16 from the owner's CV; every sentence traces to the CV.
 
-I'm a fullstack software developer based in Milan. I work on the Microsoft .NET stack: C#, ASP.NET MVC and Web API on the backend, Oracle and SQL Server for data, JavaScript on the frontend. Over the years I've connected enterprise applications to Salesforce, ServiceNow and Google APIs. My background is in systems and cybersecurity, and today I also build with AI tools such as Claude Code and Codex. I speak Italian, English and Mandarin Chinese, and as a volunteer I run the technical side of ICPN, an association that brings together a community connected to China and Italy.
+I'm a fullstack developer based in Milan. I've been building and maintaining enterprise web applications for 8+ years on the Microsoft .NET stack: C#, ASP.NET MVC and Web API on the backend, Oracle and SQL Server for data, JavaScript on the front end.
+
+My background is in systems, networking and cybersecurity: Windows Server, VMware, VoIP and a CompTIA Security+ certification. Day to day I write the backend and connect enterprise apps to Salesforce, ServiceNow and Google APIs.
+
+I also build with AI tools, mainly Claude Code and Codex, with skills and agents. As a volunteer I'm IT manager at ICPN, an association that brings together a community connected to China and Italy: I run its website and its technical work.
 
 **Footer**
 
