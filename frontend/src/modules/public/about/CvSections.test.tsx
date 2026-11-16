@@ -1,26 +1,15 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { expect, it, vi } from 'vitest'
 import { publicApi } from '../../../shared/api/publicApi'
-import type { Education, Experience, Skill } from '../../../shared/api/types'
+import type { Experience } from '../../../shared/api/types'
 import { renderRoute } from '../../../test/render'
-import { CvDownloadLink } from './CvDownloadLink'
 import { texts } from '../../../shared/texts'
 
-function stubCv({
-  experiences = [],
-  skills = [],
-  education = [],
-}: {
-  experiences?: Experience[]
-  skills?: Skill[]
-  education?: Education[]
-}) {
+function stubCv({ experiences = [] }: { experiences?: Experience[] }) {
   vi.spyOn(publicApi, 'getExperiences').mockResolvedValue(experiences)
-  vi.spyOn(publicApi, 'getSkills').mockResolvedValue(skills)
-  vi.spyOn(publicApi, 'getEducation').mockResolvedValue(education)
 }
 
-it('renders experience ranges and lists multiline achievements while keeping a single line as a paragraph', async () => {
+it('renders change items in data order and marks only current roles', async () => {
   stubCv({
     experiences: [
       {
@@ -56,76 +45,67 @@ it('renders experience ranges and lists multiline achievements while keeping a s
       .map((item) => item.textContent),
   ).toEqual(['Built things.', 'Connected services.'])
   const junior = screen.getByRole('heading', { level: 3, name: 'Junior developer' }).closest('li')!
-  expect(within(junior).queryByRole('list')).not.toBeInTheDocument()
-  expect(within(junior).getByText('Learned things.', { selector: 'p' })).toBeInTheDocument()
+  expect(within(junior).getByRole('listitem')).toHaveTextContent('Learned things.')
+  expect(
+    within(document.getElementById('experience')!)
+      .getAllByRole('heading', { level: 3 })
+      .map((heading) => heading.textContent),
+  ).toEqual(['Developer', 'Junior developer'])
+  expect(within(developer).getByText('Current')).toBeInTheDocument()
+  expect(within(junior).queryByText('Current')).toBeNull()
 })
 
-it('groups skills by category, languages included', async () => {
+it('shows skills within their experience', async () => {
   stubCv({
-    skills: [
-      { id: 1, category: 'Backend', name: 'C#' },
-      { id: 2, category: 'Languages', name: 'Italian' },
-      { id: 3, category: 'Backend', name: 'ASP.NET' },
+    experiences: [
+      {
+        id: 1,
+        role: 'Developer',
+        company: 'Acme',
+        location: null,
+        startDate: '2020-01-01',
+        endDate: null,
+        description: 'Built things.',
+        skills: ['C#', 'ASP.NET'],
+      },
     ],
   })
   renderRoute('/about')
-  const backend = await screen.findByRole('heading', { level: 3, name: 'Backend' })
-  const languages = screen.getByRole('heading', { level: 3, name: 'Languages' })
-  const tagsOf = (heading: HTMLElement) =>
-    within(heading.closest('li') as HTMLElement)
-      .getAllByRole('listitem')
-      .map((li) => li.textContent)
-  expect(tagsOf(backend)).toEqual(['C#', 'ASP.NET'])
-  expect(tagsOf(languages)).toEqual(['Italian'])
+  const role = await screen.findByRole('heading', { name: 'Developer' })
+  expect(within(role.closest('li')!).getByRole('list', { name: 'Skills' })).toHaveTextContent('C#ASP.NET')
 })
 
-it('separates education from certifications and hides an empty group', async () => {
-  stubCv({
-    education: [{ id: 1, type: 'certification', title: 'Cert one', institution: 'Issuer', year: 2021 }],
-  })
-  renderRoute('/about')
-  expect(await screen.findByText('Certifications')).toBeInTheDocument()
-  expect(screen.queryByText('Education')).toBeNull()
-  expect(screen.getByText('Cert one')).toBeInTheDocument()
-  expect(screen.getByText('2021')).toBeInTheDocument()
-})
-
-it('shows the empty text in each section when nothing is published', async () => {
+it('shows the empty text when no experience is published', async () => {
   stubCv({})
   renderRoute('/about')
-  expect(await screen.findAllByText('Nothing published yet.')).toHaveLength(3)
+  expect(await screen.findAllByText('Nothing published yet.')).toHaveLength(1)
 })
 
-it('puts education before certifications while preserving their row labels', async () => {
+it('preserves the ICPN link in a single change item', async () => {
   stubCv({
-    education: [
-      { id: 1, type: 'certification', title: 'Cert one', institution: 'Issuer', year: 2021 },
-      { id: 2, type: 'education', title: 'Degree', institution: 'School', year: 2018 },
+    experiences: [
+      {
+        id: 1,
+        role: 'Volunteer',
+        company: 'ICPN',
+        location: null,
+        startDate: '2019-03-01',
+        endDate: null,
+        description: 'Run the icpn.it website.',
+      },
     ],
   })
   renderRoute('/about')
-  const title = await screen.findByRole('heading', { level: 3, name: 'Degree' })
-  const rows = within(title.closest('ul')!).getAllByRole('listitem')
-  expect(rows).toHaveLength(2)
-  expect(rows[0]).toHaveTextContent('2018EducationDegreeSchool')
-  expect(rows[1]).toHaveTextContent('2021CertificationsCert oneIssuer')
+  const link = await screen.findByRole('link', { name: 'icpn.it' })
+  expect(link).toHaveAttribute('href', 'https://icpn.it/')
+  expect(link.closest('li')).toHaveTextContent('Run the icpn.it website.')
 })
 
-it('keeps the bio and other career content available when one query fails', async () => {
-  stubCv({ skills: [{ id: 1, category: 'Backend', name: 'C#' }] })
+it('keeps the bio available when experience fails to load', async () => {
+  stubCv({})
   vi.spyOn(publicApi, 'getExperiences').mockRejectedValue(new Error('network'))
   renderRoute('/about')
   expect(await screen.findByRole('alert')).toHaveTextContent(texts.errors.load)
-  expect(await screen.findByText('C#')).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: texts.cv.experience })).toBeInTheDocument()
   expect(screen.getByText(texts.about.paragraphs[0])).toBeInTheDocument()
-})
-
-it('renders the download link only when a PDF URL is configured', () => {
-  const { container, unmount } = render(<CvDownloadLink url={null} />)
-  expect(container).toBeEmptyDOMElement()
-  unmount()
-  render(<CvDownloadLink url="/cv.pdf" />)
-  const link = screen.getByRole('link', { name: 'Download CV (PDF)' })
-  expect(link).toHaveAttribute('href', '/cv.pdf')
-  expect(link).toHaveAttribute('download')
 })

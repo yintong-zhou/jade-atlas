@@ -5,16 +5,18 @@ export const sampleData: PublicContent = {
   experiences: [
     {
       id: 1,
+      skills: ['C#', 'ASP.NET MVC', 'Web API', 'Oracle', 'JavaScript', 'PL/SQL', 'HTML', 'CSS', 'Bootstrap', 'jQuery', 'PostgreSQL', 'IIS', 'ADFS'],
       role: 'Software Developer',
       company: 'Sirti S.p.A.',
       location: 'Milan',
       startDate: '2023-05-01',
       endDate: null,
       description:
-        "Took company-wide Single Sign-On with ADFS (WS-Federation) from proof of concept to production across 10+ intranet and extranet web apps, used daily by thousands of employees and partners. Solved cookie persistence and invalidation in-house, without Microsoft consulting.\nBuilt RESTful APIs in C# and ASP.NET that send company data to Salesforce Data360 when a scheduler calls them: about 1,500-2,000 requests a day.\nReplaced the manual printing, signing and scanning of transport documents (DDT) with a mobile-friendly web app where warehouses and couriers view, sign, email and archive them.\nAutomated job changes for the HR department, which manages all internal employees: a request opened in ServiceNow reaches Oracle through the API, and the web app generates a document with the employee's data and the company training completed for the new role.\nPorted 38 company web apps from x86 to x64 on IIS and, for some of them, migrated VB.NET to ASP.NET C# or WebForms to ASP.NET MVC.\nBuilt the front end of an internal application that manages anomalies for customers and partners, used by about 1,100 people, including Service Work Order features for field operations through the Salesforce API (Field Service Management).",
+        "Took company-wide Single Sign-On with ADFS (WS-Federation) from proof of concept to production across 10+ intranet and extranet web apps, used daily by thousands of employees and partners. Solved cookie persistence and invalidation in-house, without Microsoft consulting.\nBuilt RESTful APIs in C# and ASP.NET that send company data to external services when a scheduler calls them: about 1,500-2,000 requests a day.\nReplaced the manual printing, signing and scanning of transport documents (DDT) with a mobile-friendly web app where warehouses and couriers view, sign, email and archive them.\nAutomated job changes for the HR department, which manages all internal employees: a request opened in an external service reaches Oracle through the API, and the web app generates a document with the employee's data and the company training completed for the new role.\nPorted 38 company web apps from x86 to x64 on IIS and, for some of them, migrated VB.NET to ASP.NET C# or WebForms to ASP.NET MVC.\nBuilt the front end of an internal application that manages anomalies for customers and partners, used by about 1,100 people, including Service Work Order features for field operations through an external API (Field Service Management).",
     },
     {
       id: 2,
+      skills: ['Website management', 'React', 'Vite', 'TypeScript', 'Claude Code', 'Codex', 'AI agents'],
       role: 'IT Manager (volunteer)',
       company: 'ICPN, non-profit association',
       location: 'Milan',
@@ -25,6 +27,7 @@ export const sampleData: PublicContent = {
     },
     {
       id: 3,
+      skills: ['C#', 'ASP.NET MVC', 'WebForms', 'Console Applications', 'SQL Server', 'PostgreSQL', 'Windows Server', 'VoIP', 'VMware'],
       role: 'Software Developer / IT Technician',
       company: 'ML Sistemi',
       location: 'Monza',
@@ -35,6 +38,7 @@ export const sampleData: PublicContent = {
     },
     {
       id: 4,
+      skills: ['C#', '.NET', 'Wireshark', 'VoIP'],
       role: 'Software Developer Intern',
       company: 'ML Sistemi',
       location: 'Monza',
@@ -148,7 +152,7 @@ export const sampleData: PublicContent = {
     {
       id: 21,
       category: 'Integrations',
-      name: 'Salesforce Data360',
+      name: 'external services',
     },
     {
       id: 22,
@@ -284,17 +288,15 @@ export const sampleData: PublicContent = {
   education: [
     {
       id: 1,
-      type: 'education',
+      type: 'certification',
       title: 'Professional specialization course in Cyber Security',
       institution: 'Volta Institute, Computer Science Specialization',
       year: 2022,
-    },
-    {
-      id: 2,
-      type: 'education',
-      title: 'Cisco CCNA Routing & Switching course',
-      institution: 'Volta Institute',
-      year: 2022,
+      qualifications: [
+        { title: 'Cisco CCNA Routing & Switching course', institution: 'Volta Institute' },
+        { title: 'CompTIA Security+', institution: 'CompTIA' },
+        { title: 'EC-Council Ethical Hacking Associate', institution: 'EC-Council' },
+      ],
     },
     {
       id: 3,
@@ -302,20 +304,6 @@ export const sampleData: PublicContent = {
       title: 'Diploma in Business Information Systems (SIA)',
       institution: 'IIS Enrico De Nicola',
       year: 2017,
-    },
-    {
-      id: 4,
-      type: 'certification',
-      title: 'CompTIA Security+',
-      institution: 'CompTIA',
-      year: 2022,
-    },
-    {
-      id: 5,
-      type: 'certification',
-      title: 'EC-Council Ethical Hacking Associate',
-      institution: 'EC-Council',
-      year: 2022,
     },
   ],
 }

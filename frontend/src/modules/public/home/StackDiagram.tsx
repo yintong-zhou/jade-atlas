@@ -1,11 +1,18 @@
+import externalApi from '../../../assets/icons/external-api.png'
 import { useEffect, useRef } from 'react'
 import dotnet from '../../../assets/icons/dotnet.svg'
-import google from '../../../assets/icons/google-icon.svg'
 import javascript from '../../../assets/icons/javascript.svg'
+import sqlServer from '../../../assets/icons/microsoft-sql-server.svg'
 import oracle from '../../../assets/icons/oracle.svg'
-import salesforce from '../../../assets/icons/salesforce.svg'
+import postgresql from '../../../assets/icons/postgresql.svg'
 import { texts } from '../../../shared/texts'
 import styles from './StackDiagram.module.css'
+
+const dataLogos: Record<string, { src: string; width: number; height: number; className?: string }> = {
+  Oracle: { src: oracle, width: 92, height: 12, className: styles.oracle },
+  'SQL Server': { src: sqlServer, width: 24, height: 24 },
+  PostgreSQL: { src: postgresql, width: 24, height: 24 },
+}
 
 export function StackDiagram() {
   const figureRef = useRef<HTMLElement>(null)
@@ -26,11 +33,13 @@ export function StackDiagram() {
       aria-label={texts.home.stack.summary}
       className={`${styles.diagram} rounded-lg bg-muted p-6 sm:p-12`}
     >
-      <div className={`${styles.node} rounded-md bg-card p-4`}>
-        <img src={javascript} alt="" width={24} height={24} />
-        <div>
-          <p className="type-h3">{texts.home.stack.frontEnd.label}</p>
-          <p className="type-body mt-2 text-muted-foreground">{texts.home.stack.frontEnd.detail}</p>
+      <div className="rounded-md bg-card p-6">
+        <div className={styles.node}>
+          <img src={javascript} alt="" width={28} height={28} />
+          <div>
+            <p className="type-h3">{texts.home.stack.frontEnd.label}</p>
+            <p className="type-body mt-2 text-muted-foreground">{texts.home.stack.frontEnd.detail}</p>
+          </div>
         </div>
       </div>
       <div className={`${styles.backend} rounded-md bg-card p-6 ring-1 ring-accent`}>
@@ -56,7 +65,7 @@ export function StackDiagram() {
                 <span className={styles.connection} />
               </span>
               <div className={`${styles.tool} rounded-md bg-card p-4`}>
-                {index === 0 && <img src={oracle} alt="" width={92} height={12} className={styles.oracle} />}
+                <img {...dataLogos[name]} alt="" />
                 <span className="type-body">{name}</span>
               </div>
             </li>
@@ -69,13 +78,15 @@ export function StackDiagram() {
         </h3>
         <ul className={styles.tools}>
           {texts.home.stack.services.items.map((name, index) => (
-            <li key={name} className={`${styles.target} ${index === 2 ? styles.lastTarget : ''}`}>
+            <li
+              key={name}
+              className={`${styles.target} ${index === texts.home.stack.services.items.length - 1 ? styles.lastTarget : ''}`}
+            >
               <span className={styles.branch} aria-hidden="true">
                 <span className={styles.connection} />
               </span>
               <div className={`${styles.tool} rounded-md bg-card p-4`}>
-                {index === 0 && <img src={salesforce} alt="" width={36} height={24} />}
-                {index === 2 && <img src={google} alt="" width={24} height={24} />}
+                <img src={externalApi} alt="" width={28} height={28} />
                 <span className="type-body">{name}</span>
               </div>
             </li>

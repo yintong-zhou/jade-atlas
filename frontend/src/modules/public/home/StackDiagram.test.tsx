@@ -35,9 +35,17 @@ it('keeps the diagram readable when IntersectionObserver is unavailable', () => 
   try {
     render(<StackDiagram />)
     expect(screen.getByRole('figure', { name: texts.home.stack.summary })).toBeVisible()
-    expect(screen.getByText('JavaScript')).toBeVisible()
-    expect(screen.getByText('Google APIs')).toBeVisible()
+    expect(screen.getByText(texts.home.stack.frontEnd.detail)).toBeVisible()
+    expect(screen.getByText('External APIs')).toBeVisible()
   } finally {
     window.IntersectionObserver = observer
   }
+})
+
+it('renders three data logos without generic database icons', () => {
+  render(<StackDiagram />)
+  const figure = screen.getByRole('figure', { name: texts.home.stack.summary })
+  const dataList = screen.getByRole('heading', { name: texts.home.stack.data.label }).nextElementSibling
+  expect(figure.querySelector('svg.lucide-database')).toBeNull()
+  expect(dataList?.querySelectorAll('img')).toHaveLength(3)
 })
