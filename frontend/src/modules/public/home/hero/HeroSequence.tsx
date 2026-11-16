@@ -2,31 +2,25 @@ import { ChevronDown } from 'lucide-react'
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'motion/react'
 import { useEffect, useEffectEvent, useRef, useState, type FocusEvent } from 'react'
 import { texts } from '../../../../shared/texts'
-import type { Dust } from './dust'
-import { createFrameCanvas } from './frameCanvas'
-import { heroFrames } from './heroFrames'
+import type { HeroScene } from './heroScene'
 import { supportsWebGL } from './heroMode'
 import { HeroCopy } from './HeroCopy'
-import { copyState, HERO, layers } from './heroTimeline'
+import { copyState, HERO, navHidden } from './heroTimeline'
 
 const span = (r: readonly [number, number]) => [r[0], r[1]]
 
-// Scroll-driven hero: a tall section with a sticky stage. The scroll scrubs the frame sequence,
-// then the real text fades in. Drawing happens only through `schedule`, at most once per frame.
+// Scroll-driven hero: a tall section with a sticky stage. The scroll animates the 3D model,
+// then the real text fades in. The live disk runs while visible; all drawing uses one RAF scheduler.
 export function HeroSequence({ onFail }: { onFail: () => void }) {
   const sectionRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
-  const imgRef = useRef<HTMLImageElement>(null)
-  const frameBoxRef = useRef<HTMLDivElement>(null)
-  const framesRef = useRef<HTMLCanvasElement>(null)
-  const dustRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const holeCanvasRef = useRef<HTMLCanvasElement>(null)
   const copyRef = useRef<HTMLDivElement>(null)
-  const nameRef = useRef<HTMLSpanElement>(null)
   const revealedRef = useRef(false)
   const scheduleRef = useRef(() => {})
   const firstScroll = useRef(true)
   const [revealed, setRevealed] = useState(false)
-  const [urls] = useState(() => (window.matchMedia('(max-width: 767px)').matches ? heroFrames.small : heroFrames.large))
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] })
   const progress = useSpring(scrollYProgress, HERO.spring)
@@ -36,17 +30,20 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
     firstScroll.current = false
     progress.jump(v)
   })
-  useMotionValueEvent(progress, 'change', () => scheduleRef.current())
+  useMotionValueEvent(progress, 'change', (p) => {
+    scheduleRef.current()
+    syncNav(p, revealedRef.current)
+  })
 
-  const restOpacity = useTransform(progress, span(HERO.copy.rest), [0, 1])
-  const restY = useTransform(progress, span(HERO.copy.rest), [12, 0])
+  // The title comes out of the tunnel towards the reader, then the rest settles under it.
+  const titleOpacity = useTransform(progress, span(HERO.copy.title), [0, 1])
+  const titleScale = useTransform(progress, span(HERO.copy.title), [1.18, 1])
   const subtitleOpacity = useTransform(progress, span(HERO.copy.subtitle), [0, 1])
   const subtitleY = useTransform(progress, span(HERO.copy.subtitle), [12, 0])
   const actionsOpacity = useTransform(progress, span(HERO.copy.actions), [0, 1])
   const actionsY = useTransform(progress, span(HERO.copy.actions), [12, 0])
   const styles = {
-    name: { opacity: useTransform(progress, span(HERO.settle), [0, 1]) },
-    rest: { opacity: restOpacity, y: restY },
+    title: { opacity: titleOpacity, scale: titleScale },
     subtitle: { opacity: subtitleOpacity, y: subtitleY },
     actions: { opacity: actionsOpacity, y: actionsY },
   }
@@ -54,38 +51,46 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
 
   const fail = useEffectEvent(onFail)
 
+  // The Header hides its island on :root[data-hero-nav='hidden'].
+  useEffect(() => {
+    syncNav(progress.get(), revealed)
+    return () => syncNav(0, true)
+  }, [progress, revealed])
+
   useEffect(() => {
     const section = sectionRef.current!
     const stage = stageRef.current!
-    const framesCanvas = framesRef.current!
-    const dustCanvas = dustRef.current!
+    const canvas = canvasRef.current!
     const copy = copyRef.current!
-    const frameBox = frameBoxRef.current!
-    const name = nameRef.current!
     let disposed = false
     let raf = 0
     let visible = true
     let dirty = false
     let resized = false
-    let dust: Dust | null = null
+    let scene: HeroScene | null = null
 
     const draw = () => {
       raf = 0
-      if (!visible) {
+      if (disposed || !visible || document.hidden) {
         dirty = true // a frame requested before the hero left the screen
         return
       }
-      const p = progress.get()
+      const p = revealedRef.current ? 1 : progress.get()
       if (resized) {
         resized = false
-        frames.resize()
-        dust?.layout()
+        try {
+          scene?.layout()
+        } catch {
+          fail()
+          return
+        }
       }
-      frames.draw(p)
-      const l = layers(p, dust != null)
-      framesCanvas.style.opacity = String(l.frames)
-      dustCanvas.style.opacity = String(l.dust)
-      dust?.render(l.travel, 1) // the canvas opacity fades the layer; fading in the shader too would square it
+      try {
+        if (scene?.render(p)) schedule()
+      } catch {
+        fail()
+        return
+      }
       copy.style.pointerEvents = copyState(p, revealedRef.current).interactive ? 'auto' : 'none'
     }
 
@@ -98,15 +103,6 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
       if (!raf) raf = requestAnimationFrame(draw)
     }
 
-    const frames = createFrameCanvas(framesCanvas, urls, HERO.track, {
-      onFirstDraw: () => {
-        if (imgRef.current) imgRef.current.style.opacity = '0'
-      },
-      onReady: schedule,
-      onNoFrames: () => {
-        if (!disposed) fail()
-      },
-    })
     scheduleRef.current = schedule
 
     const io = new IntersectionObserver(([entry]) => {
@@ -117,6 +113,10 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
       }
     })
     io.observe(section)
+    const visibility = () => {
+      if (!document.hidden) schedule()
+    }
+    document.addEventListener('visibilitychange', visibility)
     const ro =
       typeof ResizeObserver === 'undefined'
         ? null
@@ -127,56 +127,48 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
     ro?.observe(stage)
     schedule()
 
-    // Particle layer: three.js is loaded only here, after the first paint, and only with WebGL.
+    // Both GPU layers load only on the Home, with WebGL and motion enabled.
     if (supportsWebGL()) {
       const small = window.matchMedia('(max-width: 767px)').matches
-      import('./dust')
-        .then(({ createDust }) =>
+      import('./heroScene')
+        .then(({ createHeroScene }) =>
           disposed
             ? null
-            : createDust({
-                canvas: dustCanvas,
+            : createHeroScene({
+                canvas,
+                holeCanvas: holeCanvasRef.current!,
                 stage,
-                frameBox,
-                target: name,
-                imageUrl: urls[urls.length - 1],
-                count: small ? HERO.particles.small : HERO.particles.large,
+                count: small ? HERO.stars.small : HERO.stars.large,
                 onLost: () => {
-                  if (disposed || !dust) return
-                  dust.dispose()
-                  dust = null
-                  schedule()
+                  if (!disposed) fail()
                 },
               }),
         )
         .catch(() => null)
         .then((layer) => {
-          if (!layer) return
+          if (!layer) {
+            if (!disposed) fail()
+            return
+          }
           if (disposed) {
             layer.dispose()
             return
           }
-          dust = layer
+          scene = layer
           schedule()
-          // The name is measured again once the web font is in.
-          document.fonts?.ready.then(() => {
-            if (disposed || dust !== layer) return
-            layer.layout()
-            schedule()
-          })
         })
-    }
+    } else fail()
 
     return () => {
       disposed = true
       cancelAnimationFrame(raf)
       io.disconnect()
+      document.removeEventListener('visibilitychange', visibility)
       ro?.disconnect()
-      frames.dispose()
-      dust?.dispose()
+      scene?.dispose()
       scheduleRef.current = () => {}
     }
-  }, [urls, progress])
+  }, [progress])
 
   const onFocus = () => {
     revealedRef.current = true
@@ -198,26 +190,17 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
       className="relative -mt-(--header-height) h-[400svh] bg-card"
     >
       <div ref={stageRef} className="sticky top-0 h-svh overflow-hidden">
-        <div
-          ref={frameBoxRef}
-          data-hero-fx
-          className="absolute top-1/2 left-1/2 aspect-square w-[min(80vw,60svh,640px)] -translate-x-1/2 -translate-y-1/2 hero-feather"
-        >
-          <img
-            ref={imgRef}
-            src={urls[0]}
-            alt=""
-            width={720}
-            height={720}
-            fetchPriority="high"
-            className="absolute inset-0 size-full"
-          />
-          <canvas ref={framesRef} data-layer="frames" aria-hidden="true" className="absolute inset-0 size-full" />
-        </div>
         <canvas
-          ref={dustRef}
+          ref={holeCanvasRef}
           data-hero-fx
-          data-layer="dust"
+          data-layer="black-hole"
+          aria-hidden="true"
+          className="absolute inset-0 size-full"
+        />
+        <canvas
+          ref={canvasRef}
+          data-hero-fx
+          data-layer="model"
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 size-full"
         />
@@ -229,7 +212,7 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
           style={{ pointerEvents: 'none' }}
           className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-4 md:px-6 lg:px-8"
         >
-          <HeroCopy nameRef={nameRef} styles={styles} />
+          <HeroCopy styles={styles} />
         </div>
         <motion.div
           aria-hidden="true"
@@ -242,4 +225,10 @@ export function HeroSequence({ onFail }: { onFail: () => void }) {
       </div>
     </section>
   )
+}
+
+function syncNav(p: number, revealed: boolean) {
+  const root = document.documentElement
+  if (navHidden(p, revealed)) root.dataset.heroNav = 'hidden'
+  else delete root.dataset.heroNav
 }

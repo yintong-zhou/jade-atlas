@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { publicApi } from '../../../../shared/api/publicApi'
 import { texts } from '../../../../shared/texts'
@@ -8,10 +8,10 @@ beforeEach(() => {
   vi.spyOn(publicApi, 'getProjects').mockResolvedValue([])
 })
 
-it('shows the full title as one heading with the name highlighted', () => {
+it('leads with what the owner does, without the owner name', () => {
   renderRoute('/')
   const h1 = screen.getByRole('heading', { level: 1, name: texts.home.title })
-  expect(within(h1).getByText('Yintong Zhou.')).toHaveClass('text-accent')
+  expect(h1).not.toHaveTextContent(texts.owner.name)
 })
 
 it('shows subtitle and both actions', () => {
@@ -21,9 +21,9 @@ it('shows subtitle and both actions', () => {
   expect(screen.getByRole('link', { name: 'Read my CV' })).toHaveAttribute('href', '/cv')
 })
 
-it('shows the still jade stone as a decorative image and no canvas', () => {
+it('shows the complete copy without the old stone image or canvas in static mode', () => {
   renderRoute('/')
   const hero = document.querySelector('[data-hero="static"]')!
-  expect(hero.querySelector('img')).toHaveAttribute('alt', '')
+  expect(hero.querySelector('img')).toBeNull()
   expect(hero.querySelector('canvas')).toBeNull()
 })

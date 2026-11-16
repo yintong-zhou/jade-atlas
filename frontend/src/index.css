@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-*: initial;
@@ -26,8 +26,8 @@
   --color-success: #00755a;
   --color-on-success: #ffffff;
 
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
 
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -37,11 +37,75 @@
 }
 
 :root {
-  --header-height: 45px; /* 44px row + 1px border */
+  --header-height: 64px;
   --motion-fast: 200ms;
   --motion-reveal: 500ms;
   --motion-count: 800ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Floating header glass: 94% white keeps accent text AA even over pure black. */
+  --header-glass-surface: color-mix(in srgb, var(--color-card) 72%, transparent);
+  --header-glass-opaque: var(--color-card);
+  --header-glass-border: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  --header-glass-highlight: color-mix(in srgb, var(--color-card) 90%, transparent);
+  --header-glass-shadow:
+    0 8px 24px color-mix(in srgb, var(--color-primary) 8%, transparent), inset 0 1px 0 var(--header-glass-highlight);
+  --header-glass-blur: 24px;
+
+  /* Liquid glass controls (buttons, navigation island): jade and translucent white, like the hero stars.
+     The light jade is glow only; text never sits on it. */
+  --glass-jade: var(--color-accent);
+  --glass-jade-deep: #005c47;
+  --glass-jade-light: #5fd3a8;
+  --glass-tint: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--glass-jade-light) 14%, transparent),
+    color-mix(in srgb, var(--glass-jade) 8%, transparent)
+  );
+  --glass-edge: color-mix(in srgb, var(--color-card) 70%, transparent);
+
+  /* Glossy glass: a white reflection along the top edge (clear of the label), a bright rim on top and a soft inner shade at the bottom. */
+  --glass-gloss: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-card) 50%, transparent) 0%,
+    color-mix(in srgb, var(--color-card) 14%, transparent) 20%,
+    transparent 32%
+  );
+  --glass-rim:
+    inset 0 1px 1px color-mix(in srgb, var(--color-card) 85%, transparent),
+    inset 0 -2px 6px color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --glass-shadow:
+    0 10px 30px -8px color-mix(in srgb, var(--color-primary) 22%, transparent),
+    0 2px 6px color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --glass-white-fill: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-card) 78%, transparent),
+    color-mix(in srgb, var(--color-card) 52%, transparent)
+  );
+
+  /* Serene earthy greens for the buttons (moss and sand), with diffuse light instead of a sharp gloss. */
+  --glass-moss: #3d6b56;
+  --glass-moss-deep: #2c4f40;
+  --glass-sand: #e9e4d4;
+  --glass-moss-fill: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--glass-moss) 86%, transparent),
+    color-mix(in srgb, var(--glass-moss-deep) 90%, transparent)
+  );
+  --glass-sand-fill: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--color-card) 72%, transparent),
+    color-mix(in srgb, var(--glass-sand) 48%, transparent)
+  );
+  --glass-soft-light: radial-gradient(
+    120% 90% at 25% 0%,
+    color-mix(in srgb, var(--color-card) 30%, transparent),
+    transparent 55%
+  );
+  --glass-soft-rim:
+    inset 0 1px 0 color-mix(in srgb, var(--color-card) 55%, transparent),
+    inset 0 -1px 4px color-mix(in srgb, var(--glass-moss-deep) 10%, transparent);
+  --glass-soft-shadow: 0 12px 32px -14px color-mix(in srgb, var(--glass-moss-deep) 45%, transparent);
 }
 
 @layer base {
@@ -132,6 +196,109 @@
     font-size: 14px;
   }
 }
+/* Serene glass buttons: frosted panels in calm earthy greens, lit softly from the top-left.
+   Main: translucent moss glass with no white light over the label, so white text stays ≥ 4.5:1 over white.
+   Secondary: frosted sand-white panel, deep moss text. */
+@utility glass-main {
+  color: var(--color-on-accent);
+  background: var(--glass-moss-fill);
+  border: 1px solid color-mix(in srgb, var(--color-card) 22%, transparent);
+  box-shadow: var(--glass-soft-rim), var(--glass-soft-shadow);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  &:hover {
+    filter: brightness(1.03);
+  }
+}
+
+@utility glass-secondary {
+  color: var(--glass-moss-deep);
+  background: var(--glass-soft-light), var(--glass-sand-fill);
+  border: 1px solid color-mix(in srgb, var(--color-card) 60%, transparent);
+  box-shadow: var(--glass-soft-rim), var(--glass-soft-shadow);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  &:hover {
+    background: var(--glass-soft-light), var(--glass-tint), var(--glass-sand-fill);
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: var(--glass-soft-light), var(--color-card);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    background: var(--glass-soft-light), var(--color-card);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Trailing arrow on the main action: still, it leans forward on hover. */
+@utility glass-arrow {
+  transition: transform var(--motion-fast) var(--ease-out);
+  :where(a, button):hover > & {
+    transform: translateX(3px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/* Home title: the ".NET" glyphs themselves are jade glass: a jade gradient fill clipped to the text,
+   a translucent white rim, a soft jade glow and a light sweep through the letters.
+   The top of the fill stays at least 3.7:1 on white (large bold text needs 3:1). */
+@utility hero-net {
+  display: inline-block;
+  white-space: nowrap;
+  color: var(--color-accent);
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--glass-jade-light) 55%, transparent));
+
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    background-image:
+      linear-gradient(
+        105deg,
+        transparent 40%,
+        color-mix(in srgb, var(--color-card) 80%, transparent) 50%,
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--glass-jade-light) 35%, var(--glass-jade)) 0%,
+        var(--glass-jade) 45%,
+        var(--glass-jade-deep) 100%
+      );
+    background-size:
+      250% 100%,
+      100% 100%;
+    background-position:
+      100% 0,
+      0 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-card) 55%, transparent);
+    animation: hero-net-sweep 3.2s var(--ease-out) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* Background-position on a single word: paint only, no layout. */
+@keyframes hero-net-sweep {
+  0%,
+  35% {
+    background-position:
+      100% 0,
+      0 0;
+  }
+  75%,
+  100% {
+    background-position:
+      0% 0,
+      0 0;
+  }
+}
 
 @utility link {
   color: var(--color-accent);
@@ -140,21 +307,10 @@
 }
 
 /* Home hero: while keyboard focus is inside the hero text, show the final state whatever the scroll. */
-[data-hero][data-revealed="true"] [data-hero-copy] :is(span, p, div) {
+[data-hero][data-revealed='true'] [data-hero-copy] :is(h1, span, p, div) {
   opacity: 1 !important;
   transform: none !important;
 }
-[data-hero][data-revealed="true"] [data-hero-fx] {
+[data-hero][data-revealed='true'] [data-hero-fx] {
   opacity: 0 !important;
-}
-
-/* Home hero frames: fade the square's edges to the white page, so fragments leaving the frame
-   and the dust cut by the image border never show a straight edge. brightness lifts the frames'
-   253-254 background to pure white. */
-.hero-feather {
-  mask-image:
-    linear-gradient(to right, transparent, black 12%, black 88%, transparent),
-    linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
-  mask-composite: intersect;
-  filter: brightness(1.012);
 }

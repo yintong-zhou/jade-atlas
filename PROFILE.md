@@ -34,10 +34,13 @@ The public CV page and the seed script (phase 4) need the owner's career data: r
 
 **Home**
 
-- Title: Yintong Zhou. Fullstack .NET Software Developer.
-- Subtitle: For over 8 years I've been building enterprise web applications with C#, ASP.NET and Oracle, used every day by thousands of people.
+The Home says what the owner does; who the owner is belongs on the About page. The owner's name is not in the Home hero.
+
+- Title: I build enterprise web apps & services in .NET
+- Subtitle: Thousands of people use them every day. I write the C# and ASP.NET backend, the SQL data layer and the JavaScript front end, then connect it all to external services.
 - Buttons: "See projects", "Read my CV"
-- Numbers: 8+ years of experience, 38 web apps migrated, 10+ applications under Single Sign-On
+- Numbers: 8+ years building enterprise apps, 38 web apps migrated, 10+ apps moved to Single Sign-On
+- Contact heading: Write to me
 
 **About**
 

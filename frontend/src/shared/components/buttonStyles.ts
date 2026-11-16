@@ -1,9 +1,9 @@
 const base =
-  'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-6 font-medium transition-[color,background-color,border-color] duration-(--motion-fast)'
+  'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 font-medium transition-[filter,background,box-shadow] duration-(--motion-fast) motion-reduce:transition-none'
 
 const variants = {
-  main: 'bg-accent text-on-accent',
-  secondary: 'border border-primary text-foreground hover:bg-muted',
+  main: 'glass-main',
+  secondary: 'glass-secondary',
 }
 
 export type ButtonVariant = keyof typeof variants

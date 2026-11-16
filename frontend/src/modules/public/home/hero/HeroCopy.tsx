@@ -1,38 +1,34 @@
+import { ArrowRight, FileText } from 'lucide-react'
 import { motion, type MotionStyle } from 'motion/react'
-import type { Ref } from 'react'
 import { ButtonLink } from '../../../../shared/components/ButtonLink'
 import { texts } from '../../../../shared/texts'
 
-const name = `${texts.owner.name}.`
-if (!texts.home.title.startsWith(name)) throw new Error('texts.home.title must start with the owner name')
-const rest = texts.home.title.slice(name.length).trimStart()
+// .NET is the point of the title: it gets the jade glass chip.
+const [lead, tail] = texts.home.title.split('.NET')
 
-// Title (owner name highlighted + rest), subtitle and the two actions. The h1 text is exactly texts.home.title.
+// What the owner does: title, subtitle and the two actions. Who the owner is lives on the About page.
 export function HeroCopy({
-  nameRef,
   styles = {},
 }: {
-  nameRef?: Ref<HTMLSpanElement>
-  styles?: { name?: MotionStyle; rest?: MotionStyle; subtitle?: MotionStyle; actions?: MotionStyle }
+  styles?: { title?: MotionStyle; subtitle?: MotionStyle; actions?: MotionStyle }
 }) {
   return (
     <div className="mx-auto max-w-[70ch] text-center">
-      <h1 className="type-display">
-        <motion.span ref={nameRef} className="block whitespace-nowrap text-accent" style={styles.name}>
-          {name}
-        </motion.span>{' '}
-        <motion.span className="block" style={styles.rest}>
-          {rest}
-        </motion.span>
-      </h1>
+      <motion.h1 className="type-display text-balance" style={styles.title}>
+        {lead}
+        <span className="hero-net">.NET</span>
+        {tail}
+      </motion.h1>
       <motion.p className="type-body-lg mt-6 text-muted-foreground" style={styles.subtitle}>
         {texts.home.subtitle}
       </motion.p>
       <motion.div className="mt-8 flex flex-wrap justify-center gap-4" style={styles.actions}>
         <ButtonLink to="/projects" variant="main">
           {texts.home.seeProjects}
+          <ArrowRight aria-hidden="true" size={20} strokeWidth={1.75} className="glass-arrow" />
         </ButtonLink>
         <ButtonLink to="/cv" variant="secondary">
+          <FileText aria-hidden="true" size={20} strokeWidth={1.5} />
           {texts.home.readCv}
         </ButtonLink>
       </motion.div>

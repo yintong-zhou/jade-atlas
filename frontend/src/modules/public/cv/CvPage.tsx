@@ -56,13 +56,24 @@ export function CvPage() {
         <h1 className="type-h1">{texts.cv.title}</h1>
         <CvDownloadLink url={site.cvPdfUrl} />
       </div>
+      <CvSections />
+    </Container>
+  )
+}
 
+// Experience, skills, education and certifications: shown on the CV page and on About.
+export function CvSections() {
+  return (
+    <>
       <CvSection title={texts.cv.experience}>
         <QueryBoundary query={useExperiences()} emptyText={texts.cv.empty}>
           {(experiences) => (
             <ol className="border-l border-border">
               {experiences.map((e) => (
-                <li key={e.id} className="flex flex-col gap-1 pb-8 pl-6 last:pb-0 md:grid md:grid-cols-[12rem_1fr] md:gap-6">
+                <li
+                  key={e.id}
+                  className="flex flex-col gap-1 pb-8 pl-6 last:pb-0 md:grid md:grid-cols-[12rem_1fr] md:gap-6"
+                >
                   <p className="type-label pt-1 tabular-nums text-muted-foreground">
                     {formatDateRange(e.startDate, e.endDate)}
                   </p>
@@ -110,6 +121,6 @@ export function CvPage() {
           )}
         </QueryBoundary>
       </CvSection>
-    </Container>
+    </>
   )
 }

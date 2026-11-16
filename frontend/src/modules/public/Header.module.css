@@ -1,0 +1,70 @@
+.island {
+  gap: 0.5rem;
+  padding-inline: 0.5rem;
+  border: 1px solid var(--glass-edge);
+  background: var(--glass-gloss), var(--glass-white-fill);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--header-glass-blur)) saturate(180%);
+  backdrop-filter: blur(var(--header-glass-blur)) saturate(180%);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 600ms var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+:global(:root[data-hero-nav='hidden']) .island:not(:focus-within) {
+  opacity: 0;
+  transform: translateY(-16px) scale(0.96);
+  pointer-events: none;
+  visibility: hidden;
+  transition-delay: 0s, 0s, 600ms;
+}
+
+@media (min-width: 48rem) {
+  .island {
+    gap: 1.5rem;
+    padding-inline: 1rem;
+  }
+}
+
+.navLink {
+  transition:
+    background var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.navLink:not([aria-current='page']):hover {
+  background: var(--glass-tint);
+}
+
+.navLink[aria-current='page'] {
+  color: var(--glass-jade);
+  background: none;
+  box-shadow: none;
+  font-weight: 600;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--glass-jade-light) 55%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .island,
+  .navLink {
+    transition: none;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .island {
+    background: var(--glass-gloss), var(--color-card);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .island {
+    background: var(--glass-gloss), var(--color-card);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
