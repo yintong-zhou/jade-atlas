@@ -38,12 +38,20 @@ it('explains the stack with readable tool names before the numbers', () => {
 })
 
 it('previews at most three projects and links to the full list', async () => {
-  const projects = [full, bare, { ...full, slug: 'third' }, { ...full, slug: 'fourth' }]
+  const third = { ...full, slug: 'third', title: 'Third project', siteUrl: null, repoUrl: 'https://github.com/example/third' }
+  const fourth = { ...full, slug: 'fourth', title: 'Fourth project', siteUrl: 'https://fourth.example.com/' }
+  const projects = [full, bare, third, fourth]
   vi.spyOn(publicApi, 'getProjects').mockResolvedValue(projects)
   renderRoute('/')
   expect(await screen.findAllByRole('article')).toHaveLength(3)
   expect(screen.getByRole('link', { name: texts.home.previewAll })).toHaveAttribute('href', '/projects')
-  expect(document.querySelector('a[href="/projects/fourth"]')).not.toBeInTheDocument()
+  // Cards open the GitHub repository directly: no intermediate page.
+  const preview = screen.getAllByRole('article')
+  expect(within(preview[0]).getByRole('link')).toHaveAttribute('href', full.repoUrl)
+  expect(within(preview[1]).queryByRole('link')).toBeNull()
+  expect(within(preview[2]).getByRole('link')).toHaveAttribute('href', third.repoUrl)
+  expect(screen.queryByText(fourth.title)).not.toBeInTheDocument()
+  expect(document.querySelector('main a[href^="/projects/"]')).toBeNull()
   const sections = screen.getByRole('main').querySelectorAll(':scope > section')
   expect(sections).toHaveLength(3)
   expect(within(sections[1] as HTMLElement).getByRole('figure', { name: texts.home.stack.summary })).toBeVisible()

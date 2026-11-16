@@ -14,9 +14,6 @@ export const publicApi = {
   async getProjects(): Promise<Project[]> {
     return githubProjects()
   },
-  async getProject(slug: string): Promise<Project | null> {
-    return githubProjects().find((p) => p.slug === slug) ?? null
-  },
   async getExperiences(): Promise<Experience[]> {
     return (await content())?.experiences ?? []
   },

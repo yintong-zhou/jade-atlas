@@ -29,10 +29,7 @@ export const texts = {
   projects: {
     title: 'Projects',
     empty: 'No projects published yet.',
-    repo: 'Repository',
-    site: 'Website',
-    back: 'All projects',
-    coverAlt: (title: string) => `Cover image of ${title}`,
+    newTab: '(opens in a new tab)',
   },
   about: {
     title: 'About',

@@ -3,11 +3,10 @@ export interface Project {
   slug: string
   title: string
   summary: string
-  description: string
   technologies: string[]
   repoUrl: string | null
   siteUrl: string | null
-  coverImageUrl: string | null
+  logoUrl: string | null // a same-site path to a logo stored in the build, never a third-party URL
 }
 
 export interface Experience {

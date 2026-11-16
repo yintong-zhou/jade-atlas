@@ -1,16 +1,37 @@
 [
   {
     "name": "jade-atlas",
-    "description": null,
+    "full_name": "yintong-zhou/jade-atlas",
+    "description": "Personal portfolio - It is the first piece of a personal management system (finance, career, health)",
     "language": "TypeScript",
-    "topics": [],
+    "topics": [
+      "carrier-integration",
+      "claude",
+      "claude-code",
+      "claude-skills",
+      "cloudflare",
+      "cloudflare-workers",
+      "codex",
+      "codex-skill",
+      "finance-management",
+      "finance-tracker",
+      "oracle",
+      "personal-blog",
+      "personal-portfolio",
+      "personal-project",
+      "personal-site",
+      "personal-website",
+      "vercel"
+    ],
     "html_url": "https://github.com/yintong-zhou/jade-atlas",
-    "homepage": null,
+    "homepage": "",
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "ark",
+    "full_name": "yintong-zhou/ark",
     "description": "Ark - Where coding agents work together.",
     "language": "TypeScript",
     "topics": [
@@ -27,11 +48,30 @@
     ],
     "html_url": "https://github.com/yintong-zhou/ark",
     "homepage": "",
+    "logo": "/project-logos/ark.ico",
+    "fork": false,
+    "archived": false
+  },
+  {
+    "name": "subsmate",
+    "full_name": "ICPN/subsmate",
+    "description": "Subs Management for NoProfits Orgs",
+    "language": "TypeScript",
+    "topics": [
+      "mongodb",
+      "noprofits",
+      "subs",
+      "tracking"
+    ],
+    "html_url": "https://github.com/ICPN/subsmate",
+    "homepage": "https://subsmate.vercel.app",
+    "logo": "/project-logos/icpn--subsmate.png",
     "fork": false,
     "archived": false
   },
   {
     "name": "ilovestock",
+    "full_name": "yintong-zhou/ilovestock",
     "description": "It combines fundamental analysis, to judge whether a company is worth owning, with technical analysis, to judge whether now is a moment of possible growth",
     "language": "Python",
     "topics": [
@@ -44,11 +84,13 @@
     ],
     "html_url": "https://github.com/yintong-zhou/ilovestock",
     "homepage": "",
+    "logo": "/project-logos/ilovestock.png",
     "fork": false,
     "archived": false
   },
   {
     "name": "faixabjj",
+    "full_name": "yintong-zhou/faixabjj",
     "description": "BJJ Belt Progress Tracker",
     "language": "TypeScript",
     "topics": [
@@ -65,11 +107,13 @@
     ],
     "html_url": "https://github.com/yintong-zhou/faixabjj",
     "homepage": "https://faixabjj.vercel.app",
+    "logo": "/project-logos/faixabjj.png",
     "fork": false,
     "archived": false
   },
   {
     "name": "notify-flow",
+    "full_name": "yintong-zhou/notify-flow",
     "description": "Email Sender API, deploy in your Free Cloudflare Accont to user like a service",
     "language": "TypeScript",
     "topics": [
@@ -83,21 +127,25 @@
     ],
     "html_url": "https://github.com/yintong-zhou/notify-flow",
     "homepage": "notify-flow-docs.pages.dev",
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "yintong-zhou.github.io",
+    "full_name": "yintong-zhou/yintong-zhou.github.io",
     "description": null,
     "language": "SCSS",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/yintong-zhou.github.io",
     "homepage": "https://yintong-zhou.github.io/",
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "loresync",
+    "full_name": "yintong-zhou/loresync",
     "description": "Keeping track of manga, manhwa and manhua",
     "language": "TypeScript",
     "topics": [
@@ -113,11 +161,13 @@
     ],
     "html_url": "https://github.com/yintong-zhou/loresync",
     "homepage": "https://lore-sync.vercel.app",
+    "logo": "/project-logos/loresync.png",
     "fork": false,
     "archived": false
   },
   {
     "name": "NZT-48",
+    "full_name": "yintong-zhou/NZT-48",
     "description": "NZT-48 Skills: one skill that thinks at 100%, one that executes at 100%.",
     "language": "PowerShell",
     "topics": [
@@ -138,21 +188,25 @@
     ],
     "html_url": "https://github.com/yintong-zhou/NZT-48",
     "homepage": "",
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "yintong-zhou",
+    "full_name": "yintong-zhou/yintong-zhou",
     "description": null,
     "language": null,
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/yintong-zhou",
     "homepage": null,
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "hourworth",
+    "full_name": "yintong-zhou/hourworth",
     "description": null,
     "language": "JavaScript",
     "topics": [
@@ -162,21 +216,25 @@
     ],
     "html_url": "https://github.com/yintong-zhou/hourworth",
     "homepage": "hourworth-money.vercel.app",
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "LogInsight",
+    "full_name": "yintong-zhou/LogInsight",
     "description": null,
     "language": "JavaScript",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/LogInsight",
     "homepage": null,
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "personal-site-source",
+    "full_name": "yintong-zhou/personal-site-source",
     "description": "This is my personal portfolio",
     "language": "HTML",
     "topics": [
@@ -188,66 +246,79 @@
     ],
     "html_url": "https://github.com/yintong-zhou/personal-site-source",
     "homepage": "https://yintong-zhou.pages.dev/",
+    "logo": null,
     "fork": false,
     "archived": false
   },
   {
     "name": "empatia-ai",
+    "full_name": "yintong-zhou/empatia-ai",
     "description": "Empatia AI is a chat for daily psychology and emotional support",
     "language": "TypeScript",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/empatia-ai",
     "homepage": "",
+    "logo": null,
     "fork": false,
     "archived": true
   },
   {
     "name": "aes-tool",
+    "full_name": "yintong-zhou/aes-tool",
     "description": "This console application is based to AES256 procotol to encrypt and decrypt various input.",
     "language": "C#",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/aes-tool",
     "homepage": null,
+    "logo": null,
     "fork": false,
     "archived": true
   },
   {
     "name": "pm-vault",
+    "full_name": "yintong-zhou/pm-vault",
     "description": "Password Manager Vault - It will manage accounts password using a local file encrypted with AES256",
     "language": "C#",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/pm-vault",
     "homepage": null,
+    "logo": null,
     "fork": false,
     "archived": true
   },
   {
     "name": "WannaDo",
+    "full_name": "yintong-zhou/WannaDo",
     "description": null,
     "language": "C#",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/WannaDo",
     "homepage": null,
+    "logo": null,
     "fork": false,
     "archived": true
   },
   {
     "name": "ReposTransfer",
+    "full_name": "yintong-zhou/ReposTransfer",
     "description": "Network authentication for Backup/Restore Files without Git commands.",
     "language": "C#",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/ReposTransfer",
     "homepage": "",
+    "logo": null,
     "fork": false,
     "archived": true
   },
   {
     "name": "NetworkConnection",
+    "full_name": "yintong-zhou/NetworkConnection",
     "description": "C# network connection class",
     "language": "C#",
     "topics": [],
     "html_url": "https://github.com/yintong-zhou/NetworkConnection",
     "homepage": null,
+    "logo": null,
     "fork": false,
     "archived": true
   }

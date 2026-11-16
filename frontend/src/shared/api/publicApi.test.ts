@@ -14,11 +14,3 @@ it('keeps career sample content in development', async () => {
   expect(types).toContain('education')
   expect(types).toContain('certification')
 })
-
-it('finds an exact project slug and returns null for an unknown slug', async () => {
-  const [first] = githubProjects()
-  expect(first).toBeDefined()
-  expect(await publicApi.getProject(first.slug)).toEqual(first)
-  expect(await publicApi.getProject(first.slug.toUpperCase())).toBeNull()
-  expect(await publicApi.getProject('unknown-slug')).toBeNull()
-})
