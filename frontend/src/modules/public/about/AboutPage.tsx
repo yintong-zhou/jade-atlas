@@ -1,20 +1,28 @@
 ﻿import type { CSSProperties } from 'react'
-import { useEducation, useExperiences, useSkills } from '../../../shared/api/queries'
+import { useExperiences } from '../../../shared/api/queries'
 import { Container } from '../../../shared/components/Container'
 import { QueryBoundary } from '../../../shared/components/QueryBoundary'
 import { Tag } from '../../../shared/components/Tag'
-import { formatDateRange, groupSkills } from '../../../shared/format'
-import { site } from '../../../shared/site'
+import { formatDateRange } from '../../../shared/format'
 import { texts } from '../../../shared/texts'
-import { CvDownloadLink } from './CvDownloadLink'
+import { CvPreview } from './CvPreview'
 
-// The same two text lines serve every career row.
-const row = 'grid gap-4 border-b border-border lg:grid-cols-12 lg:gap-6'
+// Rows already on screen when data arrives should start at rest.
+function settleVisibleRow(node: HTMLLIElement | null) {
+  if (!node) return
+  const initialScroll = window.scrollY
+  const settle = () => {
+    if (node.isConnected && window.scrollY === initialScroll && node.getBoundingClientRect().top < window.innerHeight) {
+      node.dataset.scrollSettled = 'true'
+    }
+  }
+  settle()
+  // Font loading can bring another row above the fold without a scroll.
+  void document.fonts?.ready.then(settle)
+}
 
 export function AboutPage() {
   const experiences = useExperiences()
-  const skills = useSkills()
-  const education = useEducation()
   return (
     <>
       <title>{`${texts.about.title} · ${texts.owner.name}`}</title>
@@ -22,6 +30,12 @@ export function AboutPage() {
         <Container>
           <div className="grid gap-3 lg:grid-cols-12 lg:gap-6">
             <h1 className="type-h1 enter lg:col-span-9">{texts.about.heading}</h1>
+            <div
+              className="enter mt-3 lg:col-span-3 lg:mt-0 lg:self-end lg:justify-self-end"
+              style={{ '--enter-i': 1 } as CSSProperties}
+            >
+              <CvPreview />
+            </div>
           </div>
           <div className="mt-12 grid gap-6 lg:grid-cols-12">
             <div
@@ -30,7 +44,17 @@ export function AboutPage() {
             >
               {texts.about.paragraphs.map((paragraph, index) => (
                 <p key={paragraph} className={`max-w-[62ch] ${index === 0 ? 'type-body-lg' : 'type-body'}`}>
-                  {paragraph}
+                  {index === 2 ? (
+                    <>
+                      {paragraph.split('ICPN')[0]}
+                      <a className="link" href="https://icpn.it/">
+                        ICPN
+                      </a>
+                      {paragraph.split('ICPN')[1]}
+                    </>
+                  ) : (
+                    paragraph
+                  )}
                 </p>
               ))}
             </div>
@@ -43,16 +67,7 @@ export function AboutPage() {
                   <dt className="type-small text-muted-foreground">{texts.about.facts.basedInLabel}</dt>
                   <dd className="type-body mt-2">{texts.about.facts.basedIn}</dd>
                 </div>
-                <div>
-                  <dt className="type-small text-muted-foreground">{texts.about.facts.languagesLabel}</dt>
-                  <dd className="type-body mt-2">
-                    {texts.about.facts.languages.map((language) => (
-                      <div key={language}>{language}</div>
-                    ))}
-                  </dd>
-                </div>
               </dl>
-              <CvDownloadLink url={site.cvPdfUrl} />
             </div>
           </div>
         </Container>
@@ -63,27 +78,48 @@ export function AboutPage() {
           <div className="mt-12">
             <QueryBoundary query={experiences} emptyText={texts.cv.empty}>
               {(entries) => (
-                <ol>
+                <ol className="career-log">
                   {entries.map((entry) => {
                     const lines = entry.description.split('\n')
                     return (
-                      <li key={entry.id} className={`${row} py-8`}>
-                        <div className="lg:col-span-4">
-                          <p className="type-label tabular-nums text-muted-foreground">
-                            {formatDateRange(entry.startDate, entry.endDate)}
-                          </p>
+                      <li key={entry.id} ref={settleVisibleRow} className="career-entry">
+                        <span className="career-node" aria-hidden="true" />
+                        <div className="career-date">
+                          <div className="career-date-tag">
+                            <p className="type-label tabular-nums text-muted-foreground">
+                              {formatDateRange(entry.startDate, entry.endDate)}
+                            </p>
+                            {entry.endDate === null && (
+                              <p className="type-label mt-2 text-accent">{texts.cv.current}</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="career-content min-w-0">
+                          <h3 className="type-h3">{entry.role}</h3>
                           <p className="type-small mt-2 text-muted-foreground">
                             {entry.location ? `${entry.company} · ${entry.location}` : entry.company}
                           </p>
-                        </div>
-                        <div className="lg:col-span-8">
-                          <h3 className="type-h3">{entry.role}</h3>
-                          {lines.length === 1 ? (
-                            <p className="type-body mt-4 max-w-[62ch]">{entry.description}</p>
-                          ) : (
-                            <ul className="type-body mt-4 max-w-[62ch] list-disc space-y-2 pl-6 marker:text-muted-foreground">
-                              {lines.map((line, index) => (
-                                <li key={index}>{line}</li>
+                          <ul className="career-changes type-body mt-6 max-w-[62ch] space-y-3">
+                            {lines.map((line, index) => (
+                              <li key={index}>
+                                {line.includes('icpn.it') ? (
+                                  <>
+                                    {line.split('icpn.it')[0]}
+                                    <a className="link" href="https://icpn.it/">
+                                      icpn.it
+                                    </a>
+                                    {line.split('icpn.it')[1]}
+                                  </>
+                                ) : (
+                                  line
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                          {entry.skills && entry.skills.length > 0 && (
+                            <ul aria-label={texts.cv.skills} className="mt-5 flex flex-wrap gap-2">
+                              {entry.skills.map((skill) => (
+                                <Tag key={skill}>{skill}</Tag>
                               ))}
                             </ul>
                           )}
@@ -97,62 +133,6 @@ export function AboutPage() {
           </div>
         </Container>
       </section>
-      <div className="section-pad space-y-24 bg-muted">
-        <section id="skills" className="scroll-mt-(--header-height)">
-          <Container>
-            <h2 className="type-h2">{texts.cv.skills}</h2>
-            <div className="mt-12">
-              <QueryBoundary query={skills} emptyText={texts.cv.empty}>
-                {(entries) => (
-                  <ul>
-                    {groupSkills(entries).map((group) => (
-                      <li key={group.category} className={`${row} py-6`}>
-                        <h3 className="type-h3 lg:col-span-4">{group.category}</h3>
-                        <ul className="flex flex-wrap content-start gap-2 lg:col-span-8">
-                          {group.names.map((name) => (
-                            <Tag key={name}>{name}</Tag>
-                          ))}
-                        </ul>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </QueryBoundary>
-            </div>
-          </Container>
-        </section>
-        <section id="education" className="scroll-mt-(--header-height)">
-          <Container>
-            <h2 className="type-h2">{texts.cv.educationAndCertifications}</h2>
-            <div className="mt-12">
-              <QueryBoundary query={education} emptyText={texts.cv.empty}>
-                {(entries) => (
-                  <ul>
-                    {(['education', 'certification'] as const).flatMap((type) =>
-                      entries
-                        .filter((entry) => entry.type === type)
-                        .map((entry) => (
-                          <li key={entry.id} className={`${row} py-8`}>
-                            <div className="lg:col-span-4">
-                              <p className="type-label tabular-nums text-muted-foreground">{entry.year}</p>
-                              <p className="type-small mt-2 text-muted-foreground">
-                                {type === 'education' ? texts.cv.education : texts.cv.certifications}
-                              </p>
-                            </div>
-                            <div className="lg:col-span-8">
-                              <h3 className="type-h3">{entry.title}</h3>
-                              <p className="type-body mt-4 max-w-[62ch] text-muted-foreground">{entry.institution}</p>
-                            </div>
-                          </li>
-                        )),
-                    )}
-                  </ul>
-                )}
-              </QueryBoundary>
-            </div>
-          </Container>
-        </section>
-      </div>
     </>
   )
 }

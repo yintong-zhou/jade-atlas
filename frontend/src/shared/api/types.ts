@@ -18,6 +18,7 @@ export interface Experience {
   startDate: string // ISO date
   endDate: string | null // ISO date, null = current
   description: string
+  skills?: string[]
 }
 
 export interface Skill {
@@ -32,6 +33,7 @@ export interface Education {
   title: string
   institution: string
   year: number
+  qualifications?: { title: string; institution: string }[]
 }
 
 export interface PublicContent {
