@@ -43,10 +43,16 @@ export const texts = {
     title: 'About',
     heading: 'Fullstack .NET software developer in Milan',
     paragraphs: [
-      "I'm a fullstack software developer based in Milan. I work on the Microsoft .NET stack: C#, ASP.NET MVC and Web API on the backend, Oracle and SQL Server for data, JavaScript on the frontend.",
-      "Over the years I've connected enterprise applications to Salesforce, ServiceNow and Google APIs. My background is in systems and cybersecurity, and today I also build with AI tools such as Claude Code and Codex.",
-      'I speak Italian, English and Mandarin Chinese, and as a volunteer I run the technical side of ICPN, an association that brings together a community connected to China and Italy.',
+      "I'm a fullstack developer based in Milan. I've been building and maintaining enterprise web applications for 8+ years on the Microsoft .NET stack: C#, ASP.NET MVC and Web API on the backend, Oracle and SQL Server for data, JavaScript on the front end.",
+      'My background is in systems, networking and cybersecurity: Windows Server, VMware, VoIP and a CompTIA Security+ certification. Day to day I write the backend and connect enterprise apps to Salesforce, ServiceNow and Google APIs.',
+      "I also build with AI tools, mainly Claude Code and Codex, with skills and agents. As a volunteer I'm IT manager at ICPN, an association that brings together a community connected to China and Italy: I run its website and its technical work.",
     ],
+    facts: {
+      basedInLabel: 'Based in',
+      basedIn: 'Milan',
+      languagesLabel: 'Languages',
+      languages: ['Italian, native', 'English, B2', 'Mandarin Chinese, C1 speaking, B1 writing'],
+    },
     cvLink: 'View my CV',
   },
   cv: {

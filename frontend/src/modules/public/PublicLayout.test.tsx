@@ -67,7 +67,7 @@ it.each(['/', '/about', '/cv', '/projects', '/nope'])('closes %s with one email 
 it('renders the About copy and sets the document title', () => {
   renderRoute('/about')
   expect(screen.getByRole('heading', { level: 1, name: texts.about.heading })).toBeInTheDocument()
-  expect(screen.getByText(/I'm a fullstack software developer based in Milan/)).toBeInTheDocument()
+  expect(screen.getByText(/I'm a fullstack developer based in Milan/)).toBeInTheDocument()
   expect(document.title).toBe('About · Yintong Zhou')
 })
 
