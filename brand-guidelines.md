@@ -4,18 +4,26 @@ Visual rules for the public site and the private area: colour, type, layout, com
 
 ## Direction
 
-**Minimalism & Swiss style, with restrained motion.** The site presents an enterprise software developer, so it should look engineered: a clear grid, strong type hierarchy, a lot of white space, one accent colour, no decoration that does not carry information.
+**Quiet minimalism with glass controls.** Two layers, as on iOS 26:
 
-- Content first. Every page must read well with animations and images switched off.
-- One accent colour. Everything else is black, white and grey.
-- Flat surfaces: 1px borders instead of shadows, gently rounded corners, no gradients.
-- Avoid: generic corporate templates, stock illustrations, emoji used as icons, more than one call to action competing in the same view.
+- **Content layer:** white ground, large type, a lot of space, flat surfaces. No shadows, gradients or blur on content.
+- **Control layer:** the things you press float above the content as Liquid Glass in jade and translucent white: the navigation island, buttons and the closing action. Glass is a material for controls only, never for cards, text blocks or sections.
+
+Rules that follow from it:
+
+- Content first. Every page reads well with animations and images switched off.
+- One accent colour, jade. Everything else is near-black, white and grey. Real third-party logos keep their own colours.
+- One section, one idea. A Home section fills one screen; the hero is alone on the first screen.
+- Equal edges: every block starts and ends on the container lines or on a grid column.
+- Avoid: generic templates, stock illustrations, emoji as icons, cards that fade in while scrolling, two calls to action competing in one view.
+- The Home hero sequence (see "Motion") is the one large scene on the site. Everything around it stays quiet.
 
 ## Logo and name
 
 - The name `jade-atlas` never appears on the public site.
 - The private area shows only the logo, without the name.
-- Until the owner provides a logo, use a filled circle in `--color-primary`, 24px in the header.
+- The public header is a floating glass island, centred: the owner's name and the navigation (Projects, About). No logo beside the name.
+- Until the owner provides a logo for the private area, use a filled circle in `--color-primary`, 24px.
 - Keep clear space around the logo equal to half its height.
 
 ## Colour
@@ -24,206 +32,200 @@ Light theme only in v1. Components use the semantic tokens below, never raw hex 
 
 | Token | Hex | Use |
 |---|---|---|
-| `--color-background` | `#FAFAFA` | Page background |
+| `--color-background` | `#FFFFFF` | Page ground, continuous with the end of the Home hero |
 | `--color-foreground` | `#09090B` | Body text, headings |
-| `--color-card` | `#FFFFFF` | Cards, form surfaces, header |
+| `--color-card` | `#FFFFFF` | Form surfaces, tiles on the muted ground |
 | `--color-card-foreground` | `#09090B` | Text on cards |
-| `--color-primary` | `#18181B` | Secondary buttons border, logo placeholder, strong UI |
+| `--color-primary` | `#18181B` | Logo placeholder, strong UI |
 | `--color-on-primary` | `#FFFFFF` | Text on primary |
-| `--color-secondary` | `#3F3F46` | Secondary text on dark surfaces, icons |
+| `--color-secondary` | `#3F3F46` | Icons, secondary text on dark surfaces |
 | `--color-on-secondary` | `#FFFFFF` | Text on secondary |
-| `--color-accent` | `#00755A` | Jade green. Links, the main call to action, active navigation item |
+| `--color-accent` | `#00755A` | Jade green. Links, the main action, the active navigation item, the focus ring |
 | `--color-on-accent` | `#FFFFFF` | Text on accent |
-| `--color-muted` | `#E8ECF0` | Subtle fills: tags, table header, skeletons |
-| `--color-muted-foreground` | `#475569` | Secondary text, captions, dates |
-| `--color-border` | `#E4E4E7` | Decorative dividers and card borders |
+| `--color-muted` | `#F3F5F4` | The alternate ground (one band per page) and tiles on the white ground |
+| `--color-muted-foreground` | `#52525B` | Secondary text, captions, dates |
+| `--color-border` | `#E4E4E7` | The 1px rule that closes a list row |
 | `--color-border-strong` | `#71717A` | Borders of inputs and other controls |
-| `--color-ring` | `#18181B` | Focus ring |
+| `--color-ring` | `#00755A` | Focus ring |
 | `--color-destructive` | `#DC2626` | Delete actions, form errors |
 | `--color-on-destructive` | `#FFFFFF` | Text on destructive |
-| `--color-success` | `#00755A` | "Published" state, save confirmation. Same value as the accent: a second green would be indistinguishable from it |
+| `--color-success` | `#00755A` | "Published" state, save confirmation |
 | `--color-on-success` | `#FFFFFF` | Text on success |
 
-Define the tokens once as CSS custom properties on `:root` and expose them to Tailwind as theme colours.
+Define the tokens once as CSS custom properties and expose them to Tailwind as theme colours.
+
+**Glass tokens** (controls only, defined on `:root`): `--glass-jade`, `--glass-jade-deep`, `--glass-jade-light`, `--glass-fill` (translucent white), `--glass-jade-fill` (translucent jade for the main action), `--glass-tint` (hover), `--glass-edge`, `--glass-rim`, `--glass-shadow`, `--glass-blur`. Jade and translucent white only: no other hue, whatever a style reference shows.
 
 **Rules**
 
-- The accent is for links, the single main call to action of a view, and the active navigation item. Do not use it for backgrounds of sections, headings or decoration.
+- The interface stays 90–95% neutral. The accent is for links, the one main action of a view, the active navigation item, the focus ring and the Home hero's light. Never a section ground.
+- White text on the jade glass fill stays at least 4.5:1 at every point of the gradient. The light jade is glow only; text never sits on it.
+- Glass falls back to an opaque surface when `backdrop-filter` is unsupported or the system asks for reduced transparency.
 - Status is never colour alone: "Published", errors and confirmations always carry a text label or an icon.
-- `--color-border` is too light to delimit a control (1.22:1). Inputs, checkboxes and selects use `--color-border-strong`.
+- `--color-border` is too light to delimit a control. Inputs, checkboxes and selects use `--color-border-strong`.
+- Third-party logos (the stack diagram) are the real marks in their own colours, small (at most 28px), never redrawn or tinted. The footer carries "Product names and logos are trademarks of their owners".
 
-**Measured contrast (WCAG 2)**
-
-| Pair | Ratio |
-|---|---|
-| Foreground on background | 19.06 |
-| Muted foreground on background | 7.26 |
-| Muted foreground on muted | 6.38 |
-| Accent on background (links) | 5.45 |
-| Accent on muted | 4.79 |
-| White on accent (button) | 5.69 |
-| Destructive on background | 4.63 |
-| Border strong on card | 4.83 |
-
-Every text pair is at least 4.5:1 (AA). Recheck with the same method if a token changes.
+**Contrast (WCAG 2)**: every text pair is at least 4.5:1; text people read (paragraphs, card lines) is at least 7:1. Recheck with a contrast tool whenever a token changes: foreground and muted foreground on background and on muted, accent on background and on muted, white on accent.
 
 ## Typography
 
 | Role | Font | Use |
 |---|---|---|
-| Interface and text | IBM Plex Sans | Headings, body, buttons, forms |
-| Technical accent | JetBrains Mono | Highlighted numbers, technology tags, dates, code |
+| Interface and text | Manrope (variable) | Headings, body, buttons, forms |
+| Technical accent | JetBrains Mono | Highlighted numbers, technology chips, dates, code |
 
-Both are open source (SIL Open Font License). Self-host the `woff2` files with `font-display: swap`, only weights 400, 500, 600 and 700 of Plex Sans and 400 and 500 of JetBrains Mono, so the site makes no request to a third-party font service.
+Both are open source (SIL Open Font License) and self-hosted through `@fontsource`, with `font-display: swap`, so the site makes no request to a third-party font service.
 
 ```css
---font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+--font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
 --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
 ```
 
-**Scale**
+**Scale** (390px → 1440px viewport, fluid with `clamp`)
 
-| Style | Size (mobile → desktop) | Weight | Line height |
-|---|---|---|---|
-| Display (Home title) | 40 → 64px | 700 | 1.1 |
-| H1 | 32 → 48px | 600 | 1.15 |
-| H2 | 24 → 32px | 600 | 1.2 |
-| H3 | 18 → 24px | 600 | 1.3 |
-| Body large (subtitle) | 18 → 20px | 400 | 1.6 |
-| Body | 16px | 400 | 1.6 |
-| Small | 14px | 400 | 1.5 |
-| Label, tag (mono) | 12 → 14px | 500 | 1.4 |
+| Style | Size | Weight | Line height | Tracking |
+|---|---|---|---|---|
+| Display (Home title) | 38 → 72px | 500 | 1.05 | -0.045em |
+| H1 (page title) | 34 → 56px | 500 | 1.08 | -0.04em |
+| H2 (section title) | 30 → 48px | 500 | 1.1 | -0.035em |
+| H3 (card and row title) | 20 → 24px | 500 | 1.25 | -0.02em |
+| Lead | 18 → 20px | 400 | 1.5 | 0 |
+| Body | 16px | 400 | 1.625 | 0 |
+| Small | 14px | 400 | 1.5 | 0 |
+| Label, chip, date (mono) | 13px | 500 | 1.4 | 0 |
+| Figure (Home numbers, mono) | same size as H2 | 500 | 1.1 | -0.02em |
 
 **Rules**
 
-- Body text is never below 16px; nothing is below 12px.
-- Paragraphs are at most 65–75 characters wide.
-- Headings use `text-wrap: balance`; Display and H1 use letter spacing `-0.02em`. Body text keeps the default spacing.
-- Numbers that change or line up (the Home numbers, dates in the timeline, table columns) use tabular figures: `font-variant-numeric: tabular-nums`.
+- Size and tight tracking carry a headline, never weight: headings are 500, text is 400 and 500. No 600, 700 or 800 anywhere.
+- Body text is never below 16px; nothing is below 13px. Lines are at most 62 characters wide.
+- Headings use `text-wrap: balance` and take at most three lines at every width.
+- Each level is at least 1.3 times the next one on desktop. A figure never outgrows the H2.
+- Sentence case everywhere. No tracked capitals, no small caps.
+- Numbers that change or line up use tabular figures.
 - Mono is an accent. Never set a paragraph in mono.
 - Long URLs and identifiers wrap with `overflow-wrap: anywhere`.
 
 ## Layout and spacing
 
-- **Spacing scale (4px base):** 4, 8, 12, 16, 24, 32, 48, 64, 96. No values outside the scale.
-- **Container:** max width 1200px, centred, side padding 16px on mobile, 24px from 768px, 32px from 1024px.
-- **Grid:** 12 columns with 24px gutter on desktop, 4 columns with 16px gutter on mobile.
-- **Breakpoints to test:** 375, 768, 1024, 1440px. Mobile first, no horizontal scroll.
-- **Vertical rhythm, public pages:** 96px between sections on desktop, 64px on mobile.
+- **Spacing scale (4px base):** 4, 8, 12, 16, 24, 32, 48, 64, 96, 128. No values outside the scale, apart from the section paddings below.
+- **Container:** `width: min(100% - 2 * gutter, 1280px)`, centred. Gutter 24px on a phone, 48px from 640px, 80px from 1024px. The header island, every section and the footer share it.
+- **Grid:** 12 columns with a 24px gutter (12px on a phone).
+- **Two text lines:** the left container line and the split line at column 5. Every split on the site uses this pair: label, date or action on the left four columns, content on the right eight. Never mirrored, never alternating. Under 1024px a split stacks, label first.
+- **Sections:** top padding 120px (96 on a phone), bottom padding 72px (48). The section title is the first content, top-aligned; content is never centred vertically. Home sections are at least one screen tall (`min-height: 100svh`).
+- **Separation** between sections is space or a change of ground, never a rule or a shadow. One muted band per page at most. A list may close each row with a 1px rule.
+- **Breakpoints to test:** 390, 768, 1024, 1440px. Mobile first, no horizontal scroll at 320px.
 - **Private area:** same tokens, denser. 32–48px between blocks, 16px between form fields, tables with 12px cell padding.
-- **Corners:** gently rounded, never pill-shaped. `--radius-sm` 4px for tags and checkboxes, `--radius` 6px for buttons and inputs, `--radius-lg` 8px for cards and images. The only fully round shape is the logo placeholder.
-- **Elevation:** no shadows. Separate surfaces with a 1px `--color-border` line or a change of background.
+- **Corners:** `--radius-sm` 10px (small tiles, diagram nodes' icons), `--radius-md` 16px (images inside a tile, diagram nodes), `--radius-lg` 24px (tiles, panels, large images). Controls and chips are fully round. Nested corners are concentric: inner radius = outer radius − padding.
+- **Elevation:** content is flat. Only glass controls carry a soft shadow and an inner rim.
+- **Two boxes deep at most:** a tile and its image, a panel and its nodes. Never a card inside a card.
 
 ## Components
 
-- **Buttons.** Main: accent background, white text. Secondary: transparent, 1px `--color-primary` border. Destructive: destructive background, used only in the private area and always behind a confirmation. Height at least 44px, label weight 500, one main button per view.
-- **Links.** Accent colour, underlined in running text. In navigation, underline on hover and for the active item.
-- **Cards (projects).** Card background, 1px border, no shadow. On hover the border becomes `--color-foreground`. The whole card is one link.
-- **Technology tags.** Mono, 12–14px, muted background, no border, not clickable.
-- **Highlighted numbers (Home).** Mono, Display size, tabular figures, with a Small label underneath in muted foreground.
-- **Timeline (CV).** A 1px vertical line in `--color-border`, dates in mono on the left, role and company on the right. On mobile the dates move above the role.
+- **Buttons.** Fully round, at least 44px high, label weight 500. Main: jade glass, white label, optional trailing arrow. Secondary: translucent white glass, jade-deep label. One main button per view. Hover: the button rises 1px and brightens; press: it scales to 0.98. Destructive (private area only): destructive background, always behind a confirmation.
+- **Closing action.** Once per page, in the footer: a main button as wide as the container, 72–96px high, with an H3-size label.
+- **Links.** Accent colour. In running text they are underlined; standalone links draw their underline on hover.
+- **Navigation island.** Glass, fully round, centred, sticky. The active item is jade.
+- **Tiles (projects).** A flat tile on the opposite ground (muted on white, white on muted), `--radius-lg`, 8px padding around a 16:9 cover with `--radius-md`, then title, summary and chips. The whole tile is one link. Hover: the tile rises 2px and the cover zooms to 1.03 inside its frame.
+- **Chips (technologies, skills).** Mono 13px, fully round, a 6% foreground tint as background, not clickable.
+- **Rows (experience, skills, education).** One template: the label, date or category on the left line, the content on the split line, a 1px rule closing the row.
+- **Highlighted numbers (Home).** Mono, H2 size, tabular figures, with a body-size label underneath in muted foreground. They sit under the stack diagram, not in a section of their own.
+- **Stack diagram (Home).** One muted panel with white nodes: front end → backend → data and external services. Each node is real text with the tool's real logo when a licensed one exists, otherwise the name alone. Thin lines connect the nodes; a jade pulse travels along them.
 - **Forms (private area).** Always a visible label above the field, helper text below, the error next to the field in destructive colour with an icon. Never a placeholder used as a label.
-- **Focus.** Every interactive element shows a 2px `--color-ring` outline with 2px offset on keyboard focus, following the radius of the element. Never remove it.
+- **Focus.** Every interactive element shows a 2px `--color-ring` outline with 2px offset on keyboard focus, following the radius of the element. Never remove it, never animate it.
 - **Icons.** Lucide, SVG, 1.5px stroke, 20px in the interface and 24px standalone. Icon-only buttons carry an `aria-label`. No emoji.
 
 ## Images
 
-- Project covers are 16:9, cropped from the centre, with a 1px border. Reserve the space with `aspect-ratio` so the page does not shift while they load, and load them lazily below the fold.
+- Project covers are 16:9, cropped from the centre. Reserve the space with `aspect-ratio` so the page does not shift while they load, and load them lazily below the fold.
 - Every image has an `alt` text that describes it; decorative images have an empty `alt`.
-- No stock photos or generic illustrations. A project without a cover shows a muted block with the project title in mono.
+- No stock photos, no generic illustrations, no caption under an image. A project without a cover shows a tinted block with the project title in mono.
+- The Home hero is the exception: green stars on white spiral into a black hole, the view dives through a dark star tunnel and comes out on white, where the copy appears. The static fallback is the complete copy on white.
 
 ## Motion
 
-Motion explains where content comes from; it never decorates. The scope is the one in `PROJECT.md`: an introduction on the Home and sections entering the viewport. Nothing else moves, apart from state feedback on hover and press.
+Motion answers the pointer and explains where content comes from. Three places move: the Home hero sequence, the head of a page as it loads, and controls under the pointer. Nothing fades in because the page scrolled.
 
 **Which tool for what**
 
 | Case | Tool |
 |---|---|
 | Hover, press and focus feedback | CSS transitions |
-| Sections entering the viewport | Motion (`motion/react`) |
-| Home introduction sequence, count-up of the three numbers | AnimeJS (timeline) |
+| Page head entrance on load | CSS animation |
+| Pulses on the stack diagram | CSS animation |
+| Home hero sequence: scroll progress | Motion (`useScroll`) |
+| Home hero sequence: stars, black hole, tunnel | Two decorative canvases, loaded only on the Home: an instanced WebGL scene, and the MIT-licensed dgreenheck TSL raymarcher using WebGPURenderer with its WebGL fallback |
+| Count-up of the three numbers, when they enter the viewport | AnimeJS |
 
-One element is animated by one tool only. Never put Motion and AnimeJS on the same node.
+One element is animated by one tool only.
 
 **Tokens**
 
 | Token | Value | Use |
 |---|---|---|
-| `--motion-fast` | 200ms | Hover and press: colour and border only |
-| `--motion-reveal` | 500ms | A section entering the viewport |
-| `--motion-intro-step` | 600ms | Each step of the Home introduction |
+| `--motion-fast` | 200ms | Hover and press |
+| `--motion-reveal` | 500ms | Page head entrance |
 | `--motion-count` | 800ms | Count-up of the Home numbers |
-| `--ease-out` | `cubic-bezier(0.33, 1, 0.68, 1)` | Reveals and state changes |
-| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Home introduction |
-| Distance | 24px for sections, 12px for small elements | Vertical offset at the start |
-| Stagger | 80ms between blocks, 40ms between cards | At most 8 staggered elements |
+| `--ease-out` | `cubic-bezier(0.33, 1, 0.68, 1)` | Entrances and state changes |
+| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Count-up of the Home numbers |
 
 **Rules**
 
-- Animate `opacity` and `transform` only. Never width, height, top, left or anything that moves the layout.
-- Elements arrive from below and decelerate. No bounce, no overshoot, no rotation, no parallax, no scroll-linked scrubbing.
-- A section reveals once. It does not replay when scrolling back.
-- The Home introduction lasts at most 1.5s in total and never blocks input: links and buttons work from the first frame.
-- Do not split text into letters. The title enters as one block.
+- Animate `opacity` and `transform` only (the diagram pulse may animate `background-position` or `offset-distance`). Never anything that moves the layout.
+- **Page head entrance:** on every page except the Home, the title, the lead and the actions rise 12px and fade in once on load, 80ms apart. Nothing else enters.
+- **Hover layer:** a linked tile rises 2px and its cover zooms to 1.03; a button rises 1px and presses to 0.98; a standalone link draws its underline; the main button's arrow leans 3px forward.
+- **Diagram pulses** cycle in 2.5–4s and run only while the diagram is on screen.
+- No scroll-triggered fade-ins, no parallax, no scroll snapping, no route transitions. Scroll-linked motion exists only in the Home hero sequence.
+- Animations never block input. One exception: the Home hero text takes no pointer events until its buttons are at least half visible. While keyboard focus is inside the hero text, the hero shows its final state.
+- Do not split DOM text into letters.
 - The count-up runs once, uses tabular figures so the width does not jump, and ends on the exact value written in `PROFILE.md`.
-- At most two animated groups visible at the same time.
-- Content is visible by default in the HTML and CSS. The initial hidden state is set by the animation library, so a failed script never leaves an empty page.
-- No route transitions, no animated loaders beyond a simple skeleton or spinner in the private area.
+- Content is visible by default in the HTML and CSS, so a failed script never leaves an empty page.
+
+**Home hero sequence**
+
+The Home opens on a white sky of small green stars around a black hole with a jade accretion disk. Native scrolling pulls the stars in; the view dives into the hole, travels through a dark tunnel of stars that bends and accelerates, and exits on white, where the title, the subtitle and the two buttons appear. The owner's name is not in the hero. While the dark part of the sequence is on screen, the navigation island hides.
+
+- The scroll stays native. The hero is a tall section with a sticky stage; never intercept wheel or touch events, never scroll for the user, no scroll snapping.
+- It is the only pinned section on the site.
+- Smoothness comes first. Target 60fps on a mid-range phone:
+  - draw only inside `requestAnimationFrame`, and stop when the final white state is reached;
+  - animate the canvas content, `opacity` and `transform` only; no layout reads while scrolling;
+  - cap the star pixel ratio at 2 and scale the star count to the viewport; cap the raymarcher at 960×640 pixels and DPR 1;
+  - share geometry and material across instances, animate in the vertex shader, dispose geometry, textures, materials and renderer on unmount;
+  - stop drawing when the hero is out of the viewport.
+- The real title, subtitle and buttons are in the HTML from the first frame. The canvases are `aria-hidden`.
+- The hero is static (complete copy on white) under reduced motion, on viewports under 560px tall, and when WebGL is unavailable, the scene cannot initialize or its context is lost. It switches live when the viewport or the preference changes.
 
 **Reduced motion**
 
-When the system asks for reduced motion, the site shows the final state at once: no translation, no count-up, no sequence. Colour feedback on hover stays.
+When the system asks for reduced motion, the site shows the final state at once: no entrance, no count-up, no pulses, no hero sequence. Colour feedback on hover stays.
 
 - Motion: wrap the application in `<MotionConfig reducedMotion="user">`.
 - AnimeJS: do not start the timeline when `matchMedia("(prefers-reduced-motion: reduce)").matches` is true.
-- CSS: `@media (prefers-reduced-motion: reduce)` sets transitions on transform to `none`.
-
-**Reference snippets**
-
-Indicative, to be checked against the installed versions of `motion` and `animejs` (v4) in phase 5.
-
-```tsx
-// Section entering the viewport (Motion)
-import { motion } from "motion/react";
-
-<motion.section
-  initial={{ opacity: 0, y: 24 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true, amount: 0.2 }}
-  transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-/>
-```
-
-```ts
-// Home introduction (AnimeJS v4). Create it inside createScope() and call revert() on unmount.
-import { createTimeline, stagger } from "animejs";
-
-if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  createTimeline({ defaults: { duration: 600, ease: "outExpo" } })
-    .add(".intro-title", { opacity: [0, 1], y: [24, 0] })
-    .add(".intro-subtitle", { opacity: [0, 1], y: [24, 0] }, "-=450")
-    .add(".intro-action", { opacity: [0, 1], y: [12, 0], delay: stagger(80) }, "-=450");
-}
-```
+- CSS: `@media (prefers-reduced-motion: reduce)` removes animations and transitions on transform.
 
 ## Voice
 
 - First person, plain sentences, concrete numbers instead of adjectives.
 - English only. Sentence case in headings and buttons ("See projects", not "See Projects").
+- A page title names what the page is. A button is a verb and its object.
 - The copy comes from `PROFILE.md`. Do not add claims or personal details that are not there.
 
 ## Checklist before delivering a page
 
 - [ ] Only semantic tokens, no raw hex or off-scale spacing
-- [ ] Text contrast at least 4.5:1, controls at least 3:1
+- [ ] Text contrast at least 4.5:1 (7:1 for paragraphs), controls at least 3:1
 - [ ] Visible focus on every interactive element, full keyboard navigation
 - [ ] Touch targets at least 44×44px
-- [ ] Works at 375, 768, 1024 and 1440px without horizontal scroll
+- [ ] Works at 390, 768, 1024 and 1440px, and at 320px without horizontal scroll
+- [ ] Every block starts and ends on the container lines or a grid column
 - [ ] No layout shift from images, fonts or animations
 - [ ] Reduced motion shows the final state immediately
 - [ ] No emoji as icons; icon-only buttons have a label
+- [ ] Glass only on controls; content surfaces are flat
 
 ## Source
 
-Generated with the `ui-ux-pro-max` skill for the product type "Portfolio/Personal". Style, neutral palette, type pairing and the animation rules come from its database. Chosen by the owner: the jade green accent (the skill proposed blue) and the gently rounded corners. Added on top of it for this project: `--color-success` and `--color-border-strong`, the type and spacing scales, and the translation of the motion presets from GSAP to Motion and AnimeJS.
+First generated with the `ui-ux-pro-max` skill (2026-11-15), then changed several times by the owner for the Home hero (frame sequence, stone model, jade sky, black hole, tunnel).
+
+Rewritten on 2026-11-16 at the owner's request, following the `design-taste-frontend` skill and an Apple iOS 26 reference. Owner's decisions: glass on controls only, in jade and translucent white; a new text face, with JetBrains Mono kept; the CV merged into the About page. Taken from the skill: one section per screen, equal edges and the two text lines, the type scale and weights, the hover layer, no scroll-triggered fade-ins, real logos, the closing action in the footer. The skill dealt Manrope with JetBrains Mono (its second pairing; the first came with a different mono), the `close-type` closing and one muted band per page. Kept against the skill, by the owner's choice: the floating glass navigation, glass buttons, separate routes instead of one long page, and the three Home numbers.
