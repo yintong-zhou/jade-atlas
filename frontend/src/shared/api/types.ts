@@ -35,7 +35,6 @@ export interface Education {
 }
 
 export interface PublicContent {
-  projects: Project[]
   experiences: Experience[]
   skills: Skill[]
   education: Education[]
