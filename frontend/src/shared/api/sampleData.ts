@@ -1,6 +1,6 @@
 import type { PublicContent } from './types'
 
-// Development only. Never shipped: publicApi imports this file inside an import.meta.env.DEV block. Until the API and the CV seed exist (phase 4), the career sections are empty in production.
+// Temporary static CV content, shipped in the build (public CV data only). Phase 4: the API and the CV seed replace it and this file goes away.
 export const sampleData: PublicContent = {
   experiences: [
     {
