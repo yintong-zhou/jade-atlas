@@ -1,4 +1,4 @@
-# Once a day: repository snapshot and logos. Pushing them to main triggers the Pages build.
+# Once a day: repository snapshot and logos. Pushing them to main triggers the Cloudflare build.
 name: Refresh GitHub projects
 
 on:
