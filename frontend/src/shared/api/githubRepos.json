@@ -1,11 +1,10 @@
 [
   {
-    "name": "jade-atlas",
-    "full_name": "yintong-zhou/jade-atlas",
-    "description": "Personal portfolio - It is the first piece of a personal management system (finance, career, health)",
+    "name": "personal-portfolio",
+    "full_name": "yintong-zhou/personal-portfolio",
+    "description": "Personal portfolio",
     "language": "TypeScript",
     "topics": [
-      "carrier-integration",
       "claude",
       "claude-code",
       "claude-skills",
@@ -13,8 +12,6 @@
       "cloudflare-workers",
       "codex",
       "codex-skill",
-      "finance-management",
-      "finance-tracker",
       "oracle",
       "personal-blog",
       "personal-portfolio",
@@ -23,9 +20,9 @@
       "personal-website",
       "vercel"
     ],
-    "html_url": "https://github.com/yintong-zhou/jade-atlas",
+    "html_url": "https://github.com/yintong-zhou/personal-portfolio",
     "homepage": "",
-    "logo": "/project-logos/jade-atlas.png",
+    "logo": "/project-logos/personal-portfolio.png",
     "fork": false,
     "archived": false
   },
