@@ -1,5 +1,31 @@
 [
   {
+    "name": "getstead",
+    "full_name": "yintong-zhou/getstead",
+    "description": "Stead - your money, steady",
+    "language": "TypeScript",
+    "topics": [
+      "budgeting",
+      "budgeting-app",
+      "budgeting-software",
+      "claude",
+      "claude-code",
+      "codex",
+      "investment",
+      "investment-analysis",
+      "investment-management",
+      "investment-portfolio",
+      "money-manager",
+      "money-movement",
+      "money-tracker"
+    ],
+    "html_url": "https://github.com/yintong-zhou/getstead",
+    "homepage": "",
+    "logo": "/project-logos/getstead.svg",
+    "fork": false,
+    "archived": false
+  },
+  {
     "name": "personal-portfolio",
     "full_name": "yintong-zhou/personal-portfolio",
     "description": "Personal portfolio",
@@ -21,7 +47,7 @@
       "vercel"
     ],
     "html_url": "https://github.com/yintong-zhou/personal-portfolio",
-    "homepage": "",
+    "homepage": "https://personal-portfolio.jjservice.workers.dev/",
     "logo": "/project-logos/personal-portfolio.png",
     "fork": false,
     "archived": false
